@@ -47,3 +47,7 @@ scripts/android/cache/
 scripts/android/build/openssl/
 
 linux/bin/
+target
+.dart_tool
+*.iml
+!pubspec.lock
