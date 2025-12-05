@@ -4,12 +4,43 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use xelis_common::{api::DataElement, crypto::Address};
 use xelis_common::utils::from_coin;
+use xelis_wallet::mnemonics::{languages::english::ENGLISH, LANGUAGES};
 
 use xelis_common::{
     config::{
         COIN_DECIMALS,
     },
 };
+
+// convert a language name or ISO 639-1 code to the equivalent Xelis language index
+#[frb(sync)]
+pub fn get_language_index_from_str(input: &str) -> usize {
+    let normalized = input.trim().to_lowercase();
+
+    match normalized.as_str() {
+        "english" | "eng" | "en" => 0,
+        "french" | "français" | "francais" | "fr" | "fr-ca" => 1,
+        "italian" | "italiano" | "it" => 2,
+        "spanish" | "español" | "espanol" | "es" => 3,
+        "portuguese" | "português" | "portugues" | "pt" => 4,
+        "japanese" | "日本語" | "ja" => 5,
+        "chinese" | "simplified chinese" | "中文" | "简体中文" | "zh" | "zh-cn" => 6,
+        "russian" | "русский" | "ru" => 7,
+        "esperanto" | "eo" => 8,
+        "dutch" | "nederlands" | "nl" => 9,
+        "german" | "deutsch" | "de" => 10,
+        _ => 0,
+    }
+}
+
+// return a list of all valid mnemonic words for a given language
+#[frb(sync)]
+pub fn get_mnemonic_words(language_index: usize) -> Vec<String> {
+    let language = LANGUAGES.get(language_index).unwrap_or(&ENGLISH);
+
+    language.get_words().iter().map(|w| w.to_string()).collect()
+}
+
 
 // Check if the given address is valid
 #[frb(sync)]

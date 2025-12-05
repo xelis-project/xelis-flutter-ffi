@@ -214,13 +214,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  bool dco_decode_box_autoadd_bool(dynamic raw);
-
-  @protected
   Report dco_decode_box_autoadd_report(dynamic raw);
 
   @protected
   BigInt dco_decode_box_autoadd_usize(dynamic raw);
+
+  @protected
+  XelisAssetOwner dco_decode_box_autoadd_xelis_asset_owner(dynamic raw);
 
   @protected
   double dco_decode_f_64(dynamic raw);
@@ -244,6 +244,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<(String, BigInt)> dco_decode_list_record_string_u_64(dynamic raw);
 
   @protected
+  List<(String, XelisAssetMetadata)>
+      dco_decode_list_record_string_xelis_asset_metadata(dynamic raw);
+
+  @protected
   List<Transfer> dco_decode_list_transfer(dynamic raw);
 
   @protected
@@ -261,10 +265,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  bool? dco_decode_opt_box_autoadd_bool(dynamic raw);
+  BigInt? dco_decode_opt_box_autoadd_usize(dynamic raw);
 
   @protected
-  BigInt? dco_decode_opt_box_autoadd_usize(dynamic raw);
+  XelisAssetOwner? dco_decode_opt_box_autoadd_xelis_asset_owner(dynamic raw);
 
   @protected
   (
@@ -278,6 +282,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (String, BigInt) dco_decode_record_string_u_64(dynamic raw);
+
+  @protected
+  (String, XelisAssetMetadata) dco_decode_record_string_xelis_asset_metadata(
+      dynamic raw);
 
   @protected
   Report dco_decode_report(dynamic raw);
@@ -296,6 +304,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt dco_decode_usize(dynamic raw);
+
+  @protected
+  XelisAssetMetadata dco_decode_xelis_asset_metadata(dynamic raw);
+
+  @protected
+  XelisAssetOwner dco_decode_xelis_asset_owner(dynamic raw);
 
   @protected
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
@@ -452,13 +466,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  bool sse_decode_box_autoadd_bool(SseDeserializer deserializer);
-
-  @protected
   Report sse_decode_box_autoadd_report(SseDeserializer deserializer);
 
   @protected
   BigInt sse_decode_box_autoadd_usize(SseDeserializer deserializer);
+
+  @protected
+  XelisAssetOwner sse_decode_box_autoadd_xelis_asset_owner(
+      SseDeserializer deserializer);
 
   @protected
   double sse_decode_f_64(SseDeserializer deserializer);
@@ -484,6 +499,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<(String, XelisAssetMetadata)>
+      sse_decode_list_record_string_xelis_asset_metadata(
+          SseDeserializer deserializer);
+
+  @protected
   List<Transfer> sse_decode_list_transfer(SseDeserializer deserializer);
 
   @protected
@@ -501,10 +521,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer);
+  BigInt? sse_decode_opt_box_autoadd_usize(SseDeserializer deserializer);
 
   @protected
-  BigInt? sse_decode_opt_box_autoadd_usize(SseDeserializer deserializer);
+  XelisAssetOwner? sse_decode_opt_box_autoadd_xelis_asset_owner(
+      SseDeserializer deserializer);
 
   @protected
   (
@@ -519,6 +540,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (String, BigInt) sse_decode_record_string_u_64(SseDeserializer deserializer);
+
+  @protected
+  (String, XelisAssetMetadata) sse_decode_record_string_xelis_asset_metadata(
+      SseDeserializer deserializer);
 
   @protected
   Report sse_decode_report(SseDeserializer deserializer);
@@ -537,6 +562,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt sse_decode_usize(SseDeserializer deserializer);
+
+  @protected
+  XelisAssetMetadata sse_decode_xelis_asset_metadata(
+      SseDeserializer deserializer);
+
+  @protected
+  XelisAssetOwner sse_decode_xelis_asset_owner(SseDeserializer deserializer);
 
   @protected
   String cst_encode_AnyhowException(AnyhowException raw) {
@@ -603,12 +635,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
-  bool cst_encode_box_autoadd_bool(bool raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_bool(raw);
-  }
-
-  @protected
   JSAny cst_encode_box_autoadd_report(Report raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_report(raw);
@@ -618,6 +644,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   JSAny cst_encode_box_autoadd_usize(BigInt raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_usize(raw);
+  }
+
+  @protected
+  JSAny cst_encode_box_autoadd_xelis_asset_owner(XelisAssetOwner raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_xelis_asset_owner(raw);
   }
 
   @protected
@@ -642,6 +674,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   JSAny cst_encode_list_record_string_u_64(List<(String, BigInt)> raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw.map(cst_encode_record_string_u_64).toList().jsify()!;
+  }
+
+  @protected
+  JSAny cst_encode_list_record_string_xelis_asset_metadata(
+      List<(String, XelisAssetMetadata)> raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw
+        .map(cst_encode_record_string_xelis_asset_metadata)
+        .toList()
+        .jsify()!;
   }
 
   @protected
@@ -678,15 +720,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
-  bool? cst_encode_opt_box_autoadd_bool(bool? raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return raw == null ? null : cst_encode_box_autoadd_bool(raw);
-  }
-
-  @protected
   JSAny? cst_encode_opt_box_autoadd_usize(BigInt? raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw == null ? null : cst_encode_box_autoadd_usize(raw);
+  }
+
+  @protected
+  JSAny? cst_encode_opt_box_autoadd_xelis_asset_owner(XelisAssetOwner? raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw == null ? null : cst_encode_box_autoadd_xelis_asset_owner(raw);
   }
 
   @protected
@@ -712,6 +754,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   JSAny cst_encode_record_string_u_64((String, BigInt) raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [cst_encode_String(raw.$1), cst_encode_u_64(raw.$2)].jsify()!;
+  }
+
+  @protected
+  JSAny cst_encode_record_string_xelis_asset_metadata(
+      (String, XelisAssetMetadata) raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [cst_encode_String(raw.$1), cst_encode_xelis_asset_metadata(raw.$2)]
+        .jsify()!;
   }
 
   @protected
@@ -753,6 +803,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   JSAny cst_encode_usize(BigInt raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return castNativeBigInt(raw);
+  }
+
+  @protected
+  JSAny cst_encode_xelis_asset_metadata(XelisAssetMetadata raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [
+      cst_encode_String(raw.name),
+      cst_encode_String(raw.ticker),
+      cst_encode_u_8(raw.decimals),
+      cst_encode_u_64(raw.maxSupply),
+      cst_encode_opt_box_autoadd_xelis_asset_owner(raw.owner)
+    ].jsify()!;
+  }
+
+  @protected
+  JSAny cst_encode_xelis_asset_owner(XelisAssetOwner raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [cst_encode_String(raw.contract), cst_encode_u_64(raw.id)].jsify()!;
   }
 
   @protected
@@ -1028,13 +1096,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           PrecomputedTablesShared self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
-
-  @protected
   void sse_encode_box_autoadd_report(Report self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_usize(BigInt self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_xelis_asset_owner(
+      XelisAssetOwner self, SseSerializer serializer);
 
   @protected
   void sse_encode_f_64(double self, SseSerializer serializer);
@@ -1061,6 +1130,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<(String, BigInt)> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_record_string_xelis_asset_metadata(
+      List<(String, XelisAssetMetadata)> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_transfer(List<Transfer> self, SseSerializer serializer);
 
   @protected
@@ -1078,10 +1151,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           PrecomputedTablesShared? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer);
+  void sse_encode_opt_box_autoadd_usize(BigInt? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_usize(BigInt? self, SseSerializer serializer);
+  void sse_encode_opt_box_autoadd_xelis_asset_owner(
+      XelisAssetOwner? self, SseSerializer serializer);
 
   @protected
   void
@@ -1096,6 +1170,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_record_string_u_64(
       (String, BigInt) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_xelis_asset_metadata(
+      (String, XelisAssetMetadata) self, SseSerializer serializer);
 
   @protected
   void sse_encode_report(Report self, SseSerializer serializer);
@@ -1114,6 +1192,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_usize(BigInt self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_xelis_asset_metadata(
+      XelisAssetMetadata self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_xelis_asset_owner(
+      XelisAssetOwner self, SseSerializer serializer);
 }
 
 // Section: wire_class
@@ -1218,10 +1304,11 @@ class RustLibWire implements BaseWire {
       wasmModule.wire__crate__api__wallet__XelisWallet_change_password(
           port_, that, old_password, new_password);
 
-  void wire__crate__api__wallet__XelisWallet_clear_transaction(
-          NativePortType port_, int that, String tx_hash) =>
-      wasmModule.wire__crate__api__wallet__XelisWallet_clear_transaction(
-          port_, that, tx_hash);
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__XelisWallet_clear_transaction(
+              int that, String tx_hash) =>
+          wasmModule.wire__crate__api__wallet__XelisWallet_clear_transaction(
+              that, tx_hash);
 
   void wire__crate__api__wallet__XelisWallet_close(
           NativePortType port_, int that) =>
@@ -1289,19 +1376,40 @@ class RustLibWire implements BaseWire {
           wasmModule
               .wire__crate__api__wallet__XelisWallet_get_address_str(that);
 
+  void wire__crate__api__wallet__XelisWallet_get_all_assets(
+          NativePortType port_, int that) =>
+      wasmModule.wire__crate__api__wallet__XelisWallet_get_all_assets(
+          port_, that);
+
+  void wire__crate__api__wallet__XelisWallet_get_asset_balance_by_id(
+          NativePortType port_, int that, String asset) =>
+      wasmModule.wire__crate__api__wallet__XelisWallet_get_asset_balance_by_id(
+          port_, that, asset);
+
+  void wire__crate__api__wallet__XelisWallet_get_asset_balance_by_id_raw(
+          NativePortType port_, int that, String asset) =>
+      wasmModule
+          .wire__crate__api__wallet__XelisWallet_get_asset_balance_by_id_raw(
+              port_, that, asset);
+
   void wire__crate__api__wallet__XelisWallet_get_asset_balances(
           NativePortType port_, int that) =>
       wasmModule.wire__crate__api__wallet__XelisWallet_get_asset_balances(
           port_, that);
 
-  void wire__crate__api__wallet__XelisWallet_get_asset_balances_raw(
-          NativePortType port_, int that) =>
-      wasmModule.wire__crate__api__wallet__XelisWallet_get_asset_balances_raw(
-          port_, that);
-
   void wire__crate__api__wallet__XelisWallet_get_asset_decimals(
           NativePortType port_, int that, String asset) =>
       wasmModule.wire__crate__api__wallet__XelisWallet_get_asset_decimals(
+          port_, that, asset);
+
+  void wire__crate__api__wallet__XelisWallet_get_asset_metadata(
+          NativePortType port_, int that, String asset) =>
+      wasmModule.wire__crate__api__wallet__XelisWallet_get_asset_metadata(
+          port_, that, asset);
+
+  void wire__crate__api__wallet__XelisWallet_get_asset_ticker(
+          NativePortType port_, int that, String asset) =>
+      wasmModule.wire__crate__api__wallet__XelisWallet_get_asset_ticker(
           port_, that, asset);
 
   void wire__crate__api__wallet__XelisWallet_get_daemon_info(
@@ -1322,6 +1430,12 @@ class RustLibWire implements BaseWire {
       wasmModule.wire__crate__api__wallet__XelisWallet_get_seed(
           port_, that, language_index);
 
+  void wire__crate__api__wallet__XelisWallet_get_tracked_asset_balances_raw(
+          NativePortType port_, int that) =>
+      wasmModule
+          .wire__crate__api__wallet__XelisWallet_get_tracked_asset_balances_raw(
+              port_, that);
+
   void wire__crate__api__wallet__XelisWallet_get_xelis_balance(
           NativePortType port_, int that) =>
       wasmModule.wire__crate__api__wallet__XelisWallet_get_xelis_balance(
@@ -1336,6 +1450,11 @@ class RustLibWire implements BaseWire {
           NativePortType port_, int that) =>
       wasmModule.wire__crate__api__wallet__XelisWallet_has_xelis_balance(
           port_, that);
+
+  void wire__crate__api__wallet__XelisWallet_is_asset_tracked(
+          NativePortType port_, int that, String asset) =>
+      wasmModule.wire__crate__api__wallet__XelisWallet_is_asset_tracked(
+          port_, that, asset);
 
   void wire__crate__api__wallet__XelisWallet_is_online(
           NativePortType port_, int that) =>
@@ -1361,10 +1480,24 @@ class RustLibWire implements BaseWire {
       wasmModule.wire__crate__api__wallet__XelisWallet_rescan(
           port_, that, topoheight);
 
+  void wire__crate__api__wallet__XelisWallet_track_asset(
+          NativePortType port_, int that, String asset) =>
+      wasmModule.wire__crate__api__wallet__XelisWallet_track_asset(
+          port_, that, asset);
+
+  void wire__crate__api__wallet__XelisWallet_untrack_asset(
+          NativePortType port_, int that, String asset) =>
+      wasmModule.wire__crate__api__wallet__XelisWallet_untrack_asset(
+          port_, that, asset);
+
   void wire__crate__api__progress_report__add_progress_report(
           NativePortType port_, JSAny report) =>
       wasmModule.wire__crate__api__progress_report__add_progress_report(
           port_, report);
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__clear_asset_cache() =>
+          wasmModule.wire__crate__api__wallet__clear_asset_cache();
 
   void wire__crate__api__api__create_log_stream(
           NativePortType port_, String s) =>
@@ -1384,7 +1517,7 @@ class RustLibWire implements BaseWire {
           String? seed,
           String? private_key,
           String? precomputed_tables_path,
-          bool? l1_low) =>
+          JSAny? l1_size) =>
       wasmModule.wire__crate__api__wallet__create_xelis_wallet(
           port_,
           name,
@@ -1394,7 +1527,11 @@ class RustLibWire implements BaseWire {
           seed,
           private_key,
           precomputed_tables_path,
-          l1_low);
+          l1_size);
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__drop_wallet(int wallet) =>
+          wasmModule.wire__crate__api__wallet__drop_wallet(wallet);
 
   void wire__crate__api__utils__format_coin(
           NativePortType port_, JSAny value, int decimals) =>
@@ -1405,8 +1542,22 @@ class RustLibWire implements BaseWire {
       wasmModule.wire__crate__api__utils__format_xelis(port_, value);
 
   JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__get_asset_cache_size() =>
+          wasmModule.wire__crate__api__wallet__get_asset_cache_size();
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__wallet__get_cached_table() =>
           wasmModule.wire__crate__api__wallet__get_cached_table();
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__utils__get_language_index_from_str(String input) =>
+          wasmModule
+              .wire__crate__api__utils__get_language_index_from_str(input);
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__utils__get_mnemonic_words(JSAny language_index) =>
+          wasmModule
+              .wire__crate__api__utils__get_mnemonic_words(language_index);
 
   void wire__crate__api__logger__init_logger(NativePortType port_) =>
       wasmModule.wire__crate__api__logger__init_logger(port_);
@@ -1422,14 +1573,24 @@ class RustLibWire implements BaseWire {
           String password,
           int network,
           String? precomputed_tables_path,
-          bool? l1_low) =>
+          JSAny? l1_size) =>
       wasmModule.wire__crate__api__wallet__open_xelis_wallet(port_, name,
-          directory, password, network, precomputed_tables_path, l1_low);
+          directory, password, network, precomputed_tables_path, l1_size);
 
   void wire__crate__api__table_generation__precomputed_tables_exist(
           NativePortType port_, String precomputed_tables_path) =>
       wasmModule.wire__crate__api__table_generation__precomputed_tables_exist(
           port_, precomputed_tables_path);
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__refresh_mt_params() =>
+          wasmModule.wire__crate__api__wallet__refresh_mt_params();
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__set_mt_params(
+              JSAny thread_count, JSAny concurrency) =>
+          wasmModule.wire__crate__api__wallet__set_mt_params(
+              thread_count, concurrency);
 
   void wire__crate__api__api__set_up_rust_logger(NativePortType port_) =>
       wasmModule.wire__crate__api__api__set_up_rust_logger(port_);
@@ -1440,10 +1601,10 @@ class RustLibWire implements BaseWire {
           wasmModule.wire__crate__api__utils__split_integrated_address_json(
               integrated_address);
 
-  void wire__crate__api__wallet__update_tables(
-          NativePortType port_, String precomputed_tables_path, bool l1_low) =>
+  void wire__crate__api__wallet__update_tables(NativePortType port_,
+          String precomputed_tables_path, JSAny? l1_size) =>
       wasmModule.wire__crate__api__wallet__update_tables(
-          port_, precomputed_tables_path, l1_low);
+          port_, precomputed_tables_path, l1_size);
 
   void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter(
           int ptr) =>
@@ -1616,8 +1777,9 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__wallet__XelisWallet_change_password(
       NativePortType port_, int that, String old_password, String new_password);
 
-  external void wire__crate__api__wallet__XelisWallet_clear_transaction(
-      NativePortType port_, int that, String tx_hash);
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__XelisWallet_clear_transaction(
+          int that, String tx_hash);
 
   external void wire__crate__api__wallet__XelisWallet_close(
       NativePortType port_, int that);
@@ -1661,13 +1823,26 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__wallet__XelisWallet_get_address_str(int that);
 
+  external void wire__crate__api__wallet__XelisWallet_get_all_assets(
+      NativePortType port_, int that);
+
+  external void wire__crate__api__wallet__XelisWallet_get_asset_balance_by_id(
+      NativePortType port_, int that, String asset);
+
+  external void
+      wire__crate__api__wallet__XelisWallet_get_asset_balance_by_id_raw(
+          NativePortType port_, int that, String asset);
+
   external void wire__crate__api__wallet__XelisWallet_get_asset_balances(
       NativePortType port_, int that);
 
-  external void wire__crate__api__wallet__XelisWallet_get_asset_balances_raw(
-      NativePortType port_, int that);
-
   external void wire__crate__api__wallet__XelisWallet_get_asset_decimals(
+      NativePortType port_, int that, String asset);
+
+  external void wire__crate__api__wallet__XelisWallet_get_asset_metadata(
+      NativePortType port_, int that, String asset);
+
+  external void wire__crate__api__wallet__XelisWallet_get_asset_ticker(
       NativePortType port_, int that, String asset);
 
   external void wire__crate__api__wallet__XelisWallet_get_daemon_info(
@@ -1682,6 +1857,10 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__wallet__XelisWallet_get_seed(
       NativePortType port_, int that, JSAny? language_index);
 
+  external void
+      wire__crate__api__wallet__XelisWallet_get_tracked_asset_balances_raw(
+          NativePortType port_, int that);
+
   external void wire__crate__api__wallet__XelisWallet_get_xelis_balance(
       NativePortType port_, int that);
 
@@ -1690,6 +1869,9 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
 
   external void wire__crate__api__wallet__XelisWallet_has_xelis_balance(
       NativePortType port_, int that);
+
+  external void wire__crate__api__wallet__XelisWallet_is_asset_tracked(
+      NativePortType port_, int that, String asset);
 
   external void wire__crate__api__wallet__XelisWallet_is_online(
       NativePortType port_, int that);
@@ -1706,8 +1888,17 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__wallet__XelisWallet_rescan(
       NativePortType port_, int that, JSAny topoheight);
 
+  external void wire__crate__api__wallet__XelisWallet_track_asset(
+      NativePortType port_, int that, String asset);
+
+  external void wire__crate__api__wallet__XelisWallet_untrack_asset(
+      NativePortType port_, int that, String asset);
+
   external void wire__crate__api__progress_report__add_progress_report(
       NativePortType port_, JSAny report);
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__clear_asset_cache();
 
   external void wire__crate__api__api__create_log_stream(
       NativePortType port_, String s);
@@ -1724,7 +1915,10 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
       String? seed,
       String? private_key,
       String? precomputed_tables_path,
-      bool? l1_low);
+      JSAny? l1_size);
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__drop_wallet(int wallet);
 
   external void wire__crate__api__utils__format_coin(
       NativePortType port_, JSAny value, int decimals);
@@ -1733,7 +1927,16 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
       NativePortType port_, JSAny value);
 
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__get_asset_cache_size();
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__wallet__get_cached_table();
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__utils__get_language_index_from_str(String input);
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__utils__get_mnemonic_words(JSAny language_index);
 
   external void wire__crate__api__logger__init_logger(NativePortType port_);
 
@@ -1747,10 +1950,17 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
       String password,
       int network,
       String? precomputed_tables_path,
-      bool? l1_low);
+      JSAny? l1_size);
 
   external void wire__crate__api__table_generation__precomputed_tables_exist(
       NativePortType port_, String precomputed_tables_path);
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__refresh_mt_params();
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__wallet__set_mt_params(
+          JSAny thread_count, JSAny concurrency);
 
   external void wire__crate__api__api__set_up_rust_logger(NativePortType port_);
 
@@ -1759,7 +1969,7 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
           String integrated_address);
 
   external void wire__crate__api__wallet__update_tables(
-      NativePortType port_, String precomputed_tables_path, bool l1_low);
+      NativePortType port_, String precomputed_tables_path, JSAny? l1_size);
 
   external void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter(

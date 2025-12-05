@@ -1,7 +1,4 @@
 use std::ops::ControlFlow;
-use std::fs::File;
-use std::io::Write;
-use std::path::PathBuf;
 
 use log::trace;
 use xelis_common::crypto::ecdlp;

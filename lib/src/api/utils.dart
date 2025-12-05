@@ -10,6 +10,13 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 // These functions have error during generation (see debug logs or enable `stop_on_error: true` for more details): `from_xelis`
 
+BigInt getLanguageIndexFromStr({required String input}) =>
+    RustLib.instance.api.crateApiUtilsGetLanguageIndexFromStr(input: input);
+
+List<String> getMnemonicWords({required BigInt languageIndex}) =>
+    RustLib.instance.api
+        .crateApiUtilsGetMnemonicWords(languageIndex: languageIndex);
+
 bool isAddressValid({required String strAddress}) =>
     RustLib.instance.api.crateApiUtilsIsAddressValid(strAddress: strAddress);
 

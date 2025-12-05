@@ -8,11 +8,25 @@ import '../lib.dart';
 import 'network.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `convert_float_amount`, `create_transfers`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `fmt`, `fmt`
+// These functions are ignored because they are not marked as `pub`: `convert_float_amount`, `create_transfers`, `get_asset_data`, `get_mt_params`, `init_asset_cache`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`
 
 PrecomputedTablesShared? getCachedTable() =>
     RustLib.instance.api.crateApiWalletGetCachedTable();
+
+void dropWallet({required XelisWallet wallet}) =>
+    RustLib.instance.api.crateApiWalletDropWallet(wallet: wallet);
+
+void clearAssetCache() => RustLib.instance.api.crateApiWalletClearAssetCache();
+
+BigInt getAssetCacheSize() =>
+    RustLib.instance.api.crateApiWalletGetAssetCacheSize();
+
+void refreshMtParams() => RustLib.instance.api.crateApiWalletRefreshMtParams();
+
+void setMtParams({required BigInt threadCount, required BigInt concurrency}) =>
+    RustLib.instance.api.crateApiWalletSetMtParams(
+        threadCount: threadCount, concurrency: concurrency);
 
 Future<XelisWallet> createXelisWallet(
         {required String name,
@@ -22,7 +36,7 @@ Future<XelisWallet> createXelisWallet(
         String? seed,
         String? privateKey,
         String? precomputedTablesPath,
-        bool? l1Low}) =>
+        BigInt? l1Size}) =>
     RustLib.instance.api.crateApiWalletCreateXelisWallet(
         name: name,
         directory: directory,
@@ -31,12 +45,12 @@ Future<XelisWallet> createXelisWallet(
         seed: seed,
         privateKey: privateKey,
         precomputedTablesPath: precomputedTablesPath,
-        l1Low: l1Low);
+        l1Size: l1Size);
 
 Future<void> updateTables(
-        {required String precomputedTablesPath, required bool l1Low}) =>
+        {required String precomputedTablesPath, BigInt? l1Size}) =>
     RustLib.instance.api.crateApiWalletUpdateTables(
-        precomputedTablesPath: precomputedTablesPath, l1Low: l1Low);
+        precomputedTablesPath: precomputedTablesPath, l1Size: l1Size);
 
 Future<XelisWallet> openXelisWallet(
         {required String name,
@@ -44,14 +58,14 @@ Future<XelisWallet> openXelisWallet(
         required String password,
         required Network network,
         String? precomputedTablesPath,
-        bool? l1Low}) =>
+        BigInt? l1Size}) =>
     RustLib.instance.api.crateApiWalletOpenXelisWallet(
         name: name,
         directory: directory,
         password: password,
         network: network,
         precomputedTablesPath: precomputedTablesPath,
-        l1Low: l1Low);
+        l1Size: l1Size);
 
 // Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTablesShared>>
 abstract class PrecomputedTablesShared implements RustOpaqueInterface {}
@@ -86,7 +100,7 @@ abstract class XelisWallet implements RustOpaqueInterface {
   Future<void> changePassword(
       {required String oldPassword, required String newPassword});
 
-  Future<(Transaction, TransactionBuilderState)> clearTransaction(
+  (Transaction, TransactionBuilderState) clearTransaction(
       {required String txHash});
 
   Future<void> close();
@@ -114,11 +128,19 @@ abstract class XelisWallet implements RustOpaqueInterface {
 
   String getAddressStr();
 
+  Future<List<(String, XelisAssetMetadata)>> getAllAssets();
+
+  Future<String> getAssetBalanceById({required String asset});
+
+  Future<BigInt> getAssetBalanceByIdRaw({required String asset});
+
   Future<Map<String, String>> getAssetBalances();
 
-  Future<Map<String, BigInt>> getAssetBalancesRaw();
-
   Future<int> getAssetDecimals({required String asset});
+
+  Future<XelisAssetMetadata> getAssetMetadata({required String asset});
+
+  Future<String> getAssetTicker({required String asset});
 
   Future<String> getDaemonInfo();
 
@@ -128,11 +150,15 @@ abstract class XelisWallet implements RustOpaqueInterface {
 
   Future<String> getSeed({BigInt? languageIndex});
 
+  Future<Map<String, BigInt>> getTrackedAssetBalancesRaw();
+
   Future<String> getXelisBalance();
 
   Future<BigInt> getXelisBalanceRaw();
 
   Future<bool> hasXelisBalance();
+
+  Future<bool> isAssetTracked({required String asset});
 
   Future<bool> isOnline();
 
@@ -143,6 +169,10 @@ abstract class XelisWallet implements RustOpaqueInterface {
   Future<void> onlineMode({required String daemonAddress});
 
   Future<void> rescan({required BigInt topoheight});
+
+  Future<bool> trackAsset({required String asset});
+
+  Future<bool> untrackAsset({required String asset});
 }
 
 class Transfer {
@@ -174,4 +204,60 @@ class Transfer {
           strAddress == other.strAddress &&
           assetHash == other.assetHash &&
           extraData == other.extraData;
+}
+
+class XelisAssetMetadata {
+  final String name;
+  final String ticker;
+  final int decimals;
+  final BigInt maxSupply;
+  final XelisAssetOwner? owner;
+
+  const XelisAssetMetadata({
+    required this.name,
+    required this.ticker,
+    required this.decimals,
+    required this.maxSupply,
+    this.owner,
+  });
+
+  @override
+  int get hashCode =>
+      name.hashCode ^
+      ticker.hashCode ^
+      decimals.hashCode ^
+      maxSupply.hashCode ^
+      owner.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is XelisAssetMetadata &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          ticker == other.ticker &&
+          decimals == other.decimals &&
+          maxSupply == other.maxSupply &&
+          owner == other.owner;
+}
+
+class XelisAssetOwner {
+  final String contract;
+  final BigInt id;
+
+  const XelisAssetOwner({
+    required this.contract,
+    required this.id,
+  });
+
+  @override
+  int get hashCode => contract.hashCode ^ id.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is XelisAssetOwner &&
+          runtimeType == other.runtimeType &&
+          contract == other.contract &&
+          id == other.id;
 }

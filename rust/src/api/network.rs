@@ -5,5 +5,4 @@ pub use xelis_common::network::Network;
 pub enum _Network {
     Mainnet,
     Testnet,
-    Dev,
 }

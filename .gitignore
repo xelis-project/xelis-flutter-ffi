@@ -35,6 +35,7 @@ ios/libs/
 macos/include/
 macos/libs/
 lib/git_versions.dart
+temp/
 
 scripts/windows/vcpkg/
 scripts/linux/xelis_flutter_bins/
