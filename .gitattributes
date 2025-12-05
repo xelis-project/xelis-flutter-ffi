@@ -1,2 +1,2 @@
-# Set default to LF
+# Set all text files to use LF
 * text=auto eol=lf
