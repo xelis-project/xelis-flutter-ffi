@@ -9,6 +9,7 @@ import 'api/models/address_book_dtos.dart';
 import 'api/models/wallet_dtos.dart';
 import 'api/models/xswd_dtos.dart';
 import 'api/network.dart';
+import 'api/precomputed_tables.dart';
 import 'api/progress_report.dart';
 import 'api/seed_search_engine.dart';
 import 'api/utils.dart';
@@ -46,10 +47,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_LevelFilterPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilterPtr;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_PrecomputedTableTypePtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableTypePtr;
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_PrecomputedTablesSharedPtr => wire
@@ -108,11 +105,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   LevelFilter
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter(
-          dynamic raw);
-
-  @protected
-  PrecomputedTableType
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
           dynamic raw);
 
   @protected
@@ -258,11 +250,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  PrecomputedTableType
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          dynamic raw);
-
-  @protected
   PrecomputedTablesShared
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
           dynamic raw);
@@ -349,6 +336,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   HistoryPageFilter dco_decode_box_autoadd_history_page_filter(dynamic raw);
+
+  @protected
+  PrecomputedTableType dco_decode_box_autoadd_precomputed_table_type(
+      dynamic raw);
 
   @protected
   Report dco_decode_box_autoadd_report(dynamic raw);
@@ -454,6 +445,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PermissionPolicy dco_decode_permission_policy(dynamic raw);
 
   @protected
+  PrecomputedTableType dco_decode_precomputed_table_type(dynamic raw);
+
+  @protected
   (
     Transaction,
     TransactionBuilderState
@@ -486,6 +480,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Transfer dco_decode_transfer(dynamic raw);
+
+  @protected
+  int dco_decode_u_32(dynamic raw);
 
   @protected
   BigInt dco_decode_u_64(dynamic raw);
@@ -535,11 +532,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   LevelFilter
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter(
-          SseDeserializer deserializer);
-
-  @protected
-  PrecomputedTableType
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
           SseDeserializer deserializer);
 
   @protected
@@ -677,11 +669,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  PrecomputedTableType
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          SseDeserializer deserializer);
-
-  @protected
   PrecomputedTablesShared
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
           SseDeserializer deserializer);
@@ -769,6 +756,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   HistoryPageFilter sse_decode_box_autoadd_history_page_filter(
+      SseDeserializer deserializer);
+
+  @protected
+  PrecomputedTableType sse_decode_box_autoadd_precomputed_table_type(
       SseDeserializer deserializer);
 
   @protected
@@ -885,6 +876,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PermissionPolicy sse_decode_permission_policy(SseDeserializer deserializer);
 
   @protected
+  PrecomputedTableType sse_decode_precomputed_table_type(
+      SseDeserializer deserializer);
+
+  @protected
   (
     Transaction,
     TransactionBuilderState
@@ -918,6 +913,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Transfer sse_decode_transfer(SseDeserializer deserializer);
+
+  @protected
+  int sse_decode_u_32(SseDeserializer deserializer);
 
   @protected
   BigInt sse_decode_u_64(SseDeserializer deserializer);
@@ -1072,6 +1070,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     // Codec=Cst (C-struct based), see doc to use other codecs
     final ptr = wire.cst_new_box_autoadd_history_page_filter();
     cst_api_fill_to_wire_history_page_filter(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_precomputed_table_type>
+      cst_encode_box_autoadd_precomputed_table_type(PrecomputedTableType raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_precomputed_table_type();
+    cst_api_fill_to_wire_precomputed_table_type(raw, ptr.ref);
     return ptr;
   }
 
@@ -1344,6 +1351,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_box_autoadd_precomputed_table_type(
+      PrecomputedTableType apiObj,
+      ffi.Pointer<wire_cst_precomputed_table_type> wireObj) {
+    cst_api_fill_to_wire_precomputed_table_type(apiObj, wireObj.ref);
+  }
+
+  @protected
   void cst_api_fill_to_wire_box_autoadd_report(
       Report apiObj, ffi.Pointer<wire_cst_report> wireObj) {
     cst_api_fill_to_wire_report(apiObj, wireObj.ref);
@@ -1393,6 +1407,29 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     wireObj.level = cst_encode_level(apiObj.level);
     wireObj.tag = cst_encode_String(apiObj.tag);
     wireObj.msg = cst_encode_String(apiObj.msg);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_precomputed_table_type(
+      PrecomputedTableType apiObj, wire_cst_precomputed_table_type wireObj) {
+    if (apiObj is PrecomputedTableType_L1Low) {
+      wireObj.tag = 0;
+      return;
+    }
+    if (apiObj is PrecomputedTableType_L1Medium) {
+      wireObj.tag = 1;
+      return;
+    }
+    if (apiObj is PrecomputedTableType_L1Full) {
+      wireObj.tag = 2;
+      return;
+    }
+    if (apiObj is PrecomputedTableType_Custom) {
+      var pre_field0 = cst_encode_usize(apiObj.field0);
+      wireObj.tag = 3;
+      wireObj.kind.Custom.field0 = pre_field0;
+      return;
+    }
   }
 
   @protected
@@ -1570,10 +1607,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LevelFilter raw);
 
   @protected
-  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-      PrecomputedTableType raw);
-
-  @protected
   int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
       PrecomputedTablesShared raw);
 
@@ -1679,10 +1712,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LevelFilter raw);
 
   @protected
-  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-      PrecomputedTableType raw);
-
-  @protected
   int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
       PrecomputedTablesShared raw);
 
@@ -1737,6 +1766,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int cst_encode_permission_policy(PermissionPolicy raw);
 
   @protected
+  int cst_encode_u_32(int raw);
+
+  @protected
   int cst_encode_u_8(int raw);
 
   @protected
@@ -1768,11 +1800,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter(
           LevelFilter self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          PrecomputedTableType self, SseSerializer serializer);
 
   @protected
   void
@@ -1922,11 +1949,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          PrecomputedTableType self, SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
           PrecomputedTablesShared self, SseSerializer serializer);
 
@@ -2015,6 +2037,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_history_page_filter(
       HistoryPageFilter self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_precomputed_table_type(
+      PrecomputedTableType self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_report(Report self, SseSerializer serializer);
@@ -2131,6 +2157,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       PermissionPolicy self, SseSerializer serializer);
 
   @protected
+  void sse_encode_precomputed_table_type(
+      PrecomputedTableType self, SseSerializer serializer);
+
+  @protected
   void
       sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_transaction_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_transaction_builder_state(
           (Transaction, TransactionBuilderState) self,
@@ -2165,6 +2195,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_transfer(Transfer self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_u_32(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_64(BigInt self, SseSerializer serializer);
@@ -4006,6 +4039,37 @@ class RustLibWire implements BaseWire {
           .asFunction<
               void Function(int, ffi.Pointer<wire_cst_address_book_data>)>();
 
+  void wire__crate__api__precomputed_tables__are_precomputed_tables_available(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> precomputed_tables_path,
+    ffi.Pointer<wire_cst_precomputed_table_type> precomputed_table_type,
+  ) {
+    return _wire__crate__api__precomputed_tables__are_precomputed_tables_available(
+      port_,
+      precomputed_tables_path,
+      precomputed_table_type,
+    );
+  }
+
+  late final _wire__crate__api__precomputed_tables__are_precomputed_tables_availablePtr =
+      _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                ffi.Int64,
+                ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                ffi.Pointer<wire_cst_precomputed_table_type>,
+              )>>(
+    'frbgen_xelis_flutter_wire__crate__api__precomputed_tables__are_precomputed_tables_available',
+  );
+  late final _wire__crate__api__precomputed_tables__are_precomputed_tables_available =
+      _wire__crate__api__precomputed_tables__are_precomputed_tables_availablePtr
+          .asFunction<
+              void Function(
+                int,
+                ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                ffi.Pointer<wire_cst_precomputed_table_type>,
+              )>();
+
   WireSyncRust2DartDco wire__crate__api__wallet__clear_asset_cache() {
     return _wire__crate__api__wallet__clear_asset_cache();
   }
@@ -4090,7 +4154,7 @@ class RustLibWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> seed,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> private_key,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> precomputed_tables_path,
-    int precomputed_table_type,
+    ffi.Pointer<wire_cst_precomputed_table_type> precomputed_table_type,
   ) {
     return _wire__crate__api__wallet__create_xelis_wallet(
       port_,
@@ -4116,7 +4180,7 @@ class RustLibWire implements BaseWire {
                 ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                 ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                 ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                ffi.UintPtr,
+                ffi.Pointer<wire_cst_precomputed_table_type>,
               )>>(
       'frbgen_xelis_flutter_wire__crate__api__wallet__create_xelis_wallet');
   late final _wire__crate__api__wallet__create_xelis_wallet =
@@ -4130,7 +4194,7 @@ class RustLibWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            int,
+            ffi.Pointer<wire_cst_precomputed_table_type>,
           )>();
 
   WireSyncRust2DartDco wire__crate__api__wallet__drop_wallet(int wallet) {
@@ -4298,7 +4362,7 @@ class RustLibWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> password,
     int network,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> precomputed_tables_path,
-    int precomputed_table_type,
+    ffi.Pointer<wire_cst_precomputed_table_type> precomputed_table_type,
   ) {
     return _wire__crate__api__wallet__open_xelis_wallet(
       port_,
@@ -4320,7 +4384,7 @@ class RustLibWire implements BaseWire {
                 ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                 ffi.Int32,
                 ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                ffi.UintPtr,
+                ffi.Pointer<wire_cst_precomputed_table_type>,
               )>>(
       'frbgen_xelis_flutter_wire__crate__api__wallet__open_xelis_wallet');
   late final _wire__crate__api__wallet__open_xelis_wallet =
@@ -4332,8 +4396,83 @@ class RustLibWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             int,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            int,
+            ffi.Pointer<wire_cst_precomputed_table_type>,
           )>();
+
+  void wire__crate__api__precomputed_tables__precomputed_table_type_index(
+    int port_,
+    ffi.Pointer<wire_cst_precomputed_table_type> that,
+  ) {
+    return _wire__crate__api__precomputed_tables__precomputed_table_type_index(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire__crate__api__precomputed_tables__precomputed_table_type_indexPtr =
+      _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                ffi.Int64,
+                ffi.Pointer<wire_cst_precomputed_table_type>,
+              )>>(
+    'frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_index',
+  );
+  late final _wire__crate__api__precomputed_tables__precomputed_table_type_index =
+      _wire__crate__api__precomputed_tables__precomputed_table_type_indexPtr
+          .asFunction<
+              void Function(
+                  int, ffi.Pointer<wire_cst_precomputed_table_type>)>();
+
+  void wire__crate__api__precomputed_tables__precomputed_table_type_name(
+    int port_,
+    ffi.Pointer<wire_cst_precomputed_table_type> that,
+  ) {
+    return _wire__crate__api__precomputed_tables__precomputed_table_type_name(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire__crate__api__precomputed_tables__precomputed_table_type_namePtr =
+      _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                ffi.Int64,
+                ffi.Pointer<wire_cst_precomputed_table_type>,
+              )>>(
+    'frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_name',
+  );
+  late final _wire__crate__api__precomputed_tables__precomputed_table_type_name =
+      _wire__crate__api__precomputed_tables__precomputed_table_type_namePtr
+          .asFunction<
+              void Function(
+                  int, ffi.Pointer<wire_cst_precomputed_table_type>)>();
+
+  void wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size(
+    int port_,
+    ffi.Pointer<wire_cst_precomputed_table_type> that,
+  ) {
+    return _wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_sizePtr =
+      _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                ffi.Int64,
+                ffi.Pointer<wire_cst_precomputed_table_type>,
+              )>>(
+    'frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size',
+  );
+  late final _wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size =
+      _wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_sizePtr
+          .asFunction<
+              void Function(
+                  int, ffi.Pointer<wire_cst_precomputed_table_type>)>();
 
   WireSyncRust2DartDco wire__crate__api__wallet__refresh_mt_params() {
     return _wire__crate__api__wallet__refresh_mt_params();
@@ -4399,7 +4538,7 @@ class RustLibWire implements BaseWire {
   void wire__crate__api__wallet__update_tables(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> precomputed_tables_path,
-    int precomputed_table_type,
+    ffi.Pointer<wire_cst_precomputed_table_type> precomputed_table_type,
   ) {
     return _wire__crate__api__wallet__update_tables(
       port_,
@@ -4413,12 +4552,15 @@ class RustLibWire implements BaseWire {
           ffi.Void Function(
             ffi.Int64,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            ffi.UintPtr,
+            ffi.Pointer<wire_cst_precomputed_table_type>,
           )>>('frbgen_xelis_flutter_wire__crate__api__wallet__update_tables');
   late final _wire__crate__api__wallet__update_tables =
       _wire__crate__api__wallet__update_tablesPtr.asFunction<
           void Function(
-              int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)>();
+            int,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_precomputed_table_type>,
+          )>();
 
   void wire__crate__api__xswd__imp__xswd_handler(
     int port_,
@@ -4723,40 +4865,6 @@ class RustLibWire implements BaseWire {
   );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilterPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableTypePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-    'frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType',
-  );
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableTypePtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableTypePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-    'frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType',
-  );
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableTypePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
@@ -5138,6 +5246,19 @@ class RustLibWire implements BaseWire {
       _cst_new_box_autoadd_history_page_filterPtr
           .asFunction<ffi.Pointer<wire_cst_history_page_filter> Function()>();
 
+  ffi.Pointer<wire_cst_precomputed_table_type>
+      cst_new_box_autoadd_precomputed_table_type() {
+    return _cst_new_box_autoadd_precomputed_table_type();
+  }
+
+  late final _cst_new_box_autoadd_precomputed_table_typePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Pointer<wire_cst_precomputed_table_type> Function()>>(
+      'frbgen_xelis_flutter_cst_new_box_autoadd_precomputed_table_type');
+  late final _cst_new_box_autoadd_precomputed_table_type =
+      _cst_new_box_autoadd_precomputed_table_typePtr.asFunction<
+          ffi.Pointer<wire_cst_precomputed_table_type> Function()>();
+
   ffi.Pointer<wire_cst_report> cst_new_box_autoadd_report() {
     return _cst_new_box_autoadd_report();
   }
@@ -5507,6 +5628,22 @@ final class wire_cst_list_record_string_contact_details extends ffi.Struct {
 
 final class wire_cst_address_book_data extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_record_string_contact_details> contacts;
+}
+
+final class wire_cst_PrecomputedTableType_Custom extends ffi.Struct {
+  @ffi.UintPtr()
+  external int field0;
+}
+
+final class PrecomputedTableTypeKind extends ffi.Union {
+  external wire_cst_PrecomputedTableType_Custom Custom;
+}
+
+final class wire_cst_precomputed_table_type extends ffi.Struct {
+  @ffi.Int32()
+  external int tag;
+
+  external PrecomputedTableTypeKind kind;
 }
 
 final class wire_cst_XswdRequestType_Permission extends ffi.Struct {

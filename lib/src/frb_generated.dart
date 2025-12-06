@@ -9,6 +9,7 @@ import 'api/models/address_book_dtos.dart';
 import 'api/models/wallet_dtos.dart';
 import 'api/models/xswd_dtos.dart';
 import 'api/network.dart';
+import 'api/precomputed_tables.dart';
 import 'api/progress_report.dart';
 import 'api/seed_search_engine.dart';
 import 'api/utils.dart';
@@ -79,7 +80,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 635383291;
+  int get rustContentHash => -2056919388;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -347,6 +348,10 @@ abstract class RustLibApi extends BaseApi {
       crateApiModelsAddressBookDtosAddressBookDataGetAllEntries(
           {required AddressBookData that});
 
+  Future<bool> crateApiPrecomputedTablesArePrecomputedTablesAvailable(
+      {required String precomputedTablesPath,
+      required PrecomputedTableType precomputedTableType});
+
   void crateApiWalletClearAssetCache();
 
   void crateApiWalletClearCachedTables();
@@ -397,6 +402,15 @@ abstract class RustLibApi extends BaseApi {
       required Network network,
       String? precomputedTablesPath,
       required PrecomputedTableType precomputedTableType});
+
+  Future<int> crateApiPrecomputedTablesPrecomputedTableTypeIndex(
+      {required PrecomputedTableType that});
+
+  Future<String> crateApiPrecomputedTablesPrecomputedTableTypeName(
+      {required PrecomputedTableType that});
+
+  Future<BigInt> crateApiPrecomputedTablesPrecomputedTableTypeToL1Size(
+      {required PrecomputedTableType that});
 
   void crateApiWalletRefreshMtParams();
 
@@ -473,15 +487,6 @@ abstract class RustLibApi extends BaseApi {
       get rust_arc_decrement_strong_count_LevelFilter;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_LevelFilterPtr;
-
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_PrecomputedTableType;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_PrecomputedTableType;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_PrecomputedTableTypePtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_PrecomputedTablesShared;
@@ -2853,6 +2858,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
+  Future<bool> crateApiPrecomputedTablesArePrecomputedTablesAvailable(
+      {required String precomputedTablesPath,
+      required PrecomputedTableType precomputedTableType}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(precomputedTablesPath);
+        var arg1 =
+            cst_encode_box_autoadd_precomputed_table_type(precomputedTableType);
+        return wire
+            .wire__crate__api__precomputed_tables__are_precomputed_tables_available(
+                port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_bool,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiPrecomputedTablesArePrecomputedTablesAvailableConstMeta,
+      argValues: [precomputedTablesPath, precomputedTableType],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiPrecomputedTablesArePrecomputedTablesAvailableConstMeta =>
+          const TaskConstMeta(
+            debugName: "are_precomputed_tables_available",
+            argNames: ["precomputedTablesPath", "precomputedTableType"],
+          );
+
+  @override
   void crateApiWalletClearAssetCache() {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -2991,8 +3027,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         var arg5 = cst_encode_opt_String(privateKey);
         var arg6 = cst_encode_opt_String(precomputedTablesPath);
         var arg7 =
-            cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-                precomputedTableType);
+            cst_encode_box_autoadd_precomputed_table_type(precomputedTableType);
         return wire.wire__crate__api__wallet__create_xelis_wallet(
             port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
       },
@@ -3155,8 +3190,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
                 port_);
       },
       codec: DcoCodec(
-        decodeSuccessData:
-            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType,
+        decodeSuccessData: dco_decode_precomputed_table_type,
         decodeErrorData: dco_decode_AnyhowException,
       ),
       constMeta: kCrateApiWalletGetCurrentPrecomputedTablesTypeConstMeta,
@@ -3302,8 +3336,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         var arg3 = cst_encode_network(network);
         var arg4 = cst_encode_opt_String(precomputedTablesPath);
         var arg5 =
-            cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-                precomputedTableType);
+            cst_encode_box_autoadd_precomputed_table_type(precomputedTableType);
         return wire.wire__crate__api__wallet__open_xelis_wallet(
             port_, arg0, arg1, arg2, arg3, arg4, arg5);
       },
@@ -3337,6 +3370,88 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           "precomputedTableType"
         ],
       );
+
+  @override
+  Future<int> crateApiPrecomputedTablesPrecomputedTableTypeIndex(
+      {required PrecomputedTableType that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_precomputed_table_type(that);
+        return wire
+            .wire__crate__api__precomputed_tables__precomputed_table_type_index(
+                port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_u_32,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiPrecomputedTablesPrecomputedTableTypeIndexConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiPrecomputedTablesPrecomputedTableTypeIndexConstMeta =>
+          const TaskConstMeta(
+            debugName: "precomputed_table_type_index",
+            argNames: ["that"],
+          );
+
+  @override
+  Future<String> crateApiPrecomputedTablesPrecomputedTableTypeName(
+      {required PrecomputedTableType that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_precomputed_table_type(that);
+        return wire
+            .wire__crate__api__precomputed_tables__precomputed_table_type_name(
+                port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiPrecomputedTablesPrecomputedTableTypeNameConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiPrecomputedTablesPrecomputedTableTypeNameConstMeta =>
+          const TaskConstMeta(
+            debugName: "precomputed_table_type_name",
+            argNames: ["that"],
+          );
+
+  @override
+  Future<BigInt> crateApiPrecomputedTablesPrecomputedTableTypeToL1Size(
+      {required PrecomputedTableType that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_precomputed_table_type(that);
+        return wire
+            .wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size(
+                port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_usize,
+        decodeErrorData: dco_decode_AnyhowException,
+      ),
+      constMeta:
+          kCrateApiPrecomputedTablesPrecomputedTableTypeToL1SizeConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiPrecomputedTablesPrecomputedTableTypeToL1SizeConstMeta =>
+          const TaskConstMeta(
+            debugName: "precomputed_table_type_to_l1_size",
+            argNames: ["that"],
+          );
 
   @override
   void crateApiWalletRefreshMtParams() {
@@ -3438,8 +3553,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         var arg0 = cst_encode_String(precomputedTablesPath);
         var arg1 =
-            cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-                precomputedTableType);
+            cst_encode_box_autoadd_precomputed_table_type(precomputedTableType);
         return wire.wire__crate__api__wallet__update_tables(port_, arg0, arg1);
       },
       codec: DcoCodec(
@@ -3734,14 +3848,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_PrecomputedTableType => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_PrecomputedTableType => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType;
-
-  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_PrecomputedTablesShared => wire
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared;
 
@@ -3849,14 +3955,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return LevelFilterImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  PrecomputedTableType
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return PrecomputedTableTypeImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -4100,14 +4198,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  PrecomputedTableType
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return PrecomputedTableTypeImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
   PrecomputedTablesShared
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
           dynamic raw) {
@@ -4279,6 +4369,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   HistoryPageFilter dco_decode_box_autoadd_history_page_filter(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_history_page_filter(raw);
+  }
+
+  @protected
+  PrecomputedTableType dco_decode_box_autoadd_precomputed_table_type(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_precomputed_table_type(raw);
   }
 
   @protected
@@ -4521,6 +4618,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PrecomputedTableType dco_decode_precomputed_table_type(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return PrecomputedTableType_L1Low();
+      case 1:
+        return PrecomputedTableType_L1Medium();
+      case 2:
+        return PrecomputedTableType_L1Full();
+      case 3:
+        return PrecomputedTableType_Custom(
+          dco_decode_usize(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
   (
     Transaction,
     TransactionBuilderState
@@ -4651,6 +4767,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       extraData: dco_decode_opt_String(arr[3]),
       encryptExtraData: dco_decode_opt_box_autoadd_bool(arr[4]),
     );
+  }
+
+  @protected
+  int dco_decode_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
   }
 
   @protected
@@ -4791,15 +4913,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return LevelFilterImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  PrecomputedTableType
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return PrecomputedTableTypeImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -5050,15 +5163,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  PrecomputedTableType
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return PrecomputedTableTypeImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
   PrecomputedTablesShared
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
           SseDeserializer deserializer) {
@@ -5233,6 +5337,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_history_page_filter(deserializer));
+  }
+
+  @protected
+  PrecomputedTableType sse_decode_box_autoadd_precomputed_table_type(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_precomputed_table_type(deserializer));
   }
 
   @protected
@@ -5572,6 +5683,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PrecomputedTableType sse_decode_precomputed_table_type(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        return PrecomputedTableType_L1Low();
+      case 1:
+        return PrecomputedTableType_L1Medium();
+      case 2:
+        return PrecomputedTableType_L1Full();
+      case 3:
+        var var_field0 = sse_decode_usize(deserializer);
+        return PrecomputedTableType_Custom(var_field0);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
   (
     Transaction,
     TransactionBuilderState
@@ -5674,6 +5806,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         assetHash: var_assetHash,
         extraData: var_extraData,
         encryptExtraData: var_encryptExtraData);
+  }
+
+  @protected
+  int sse_decode_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint32();
   }
 
   @protected
@@ -5807,14 +5945,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Cst (C-struct based), see doc to use other codecs
 // ignore: invalid_use_of_internal_member
     return (raw as LevelFilterImpl).frbInternalCstEncode(move: true);
-  }
-
-  @protected
-  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-      PrecomputedTableType raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-// ignore: invalid_use_of_internal_member
-    return (raw as PrecomputedTableTypeImpl).frbInternalCstEncode(move: true);
   }
 
   @protected
@@ -6032,14 +6162,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-      PrecomputedTableType raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-// ignore: invalid_use_of_internal_member
-    return (raw as PrecomputedTableTypeImpl).frbInternalCstEncode();
-  }
-
-  @protected
   int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
       PrecomputedTablesShared raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
@@ -6148,6 +6270,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  int cst_encode_u_32(int raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw;
+  }
+
+  @protected
   int cst_encode_u_8(int raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
@@ -6207,16 +6335,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as LevelFilterImpl).frbInternalSseEncode(move: true), serializer);
-  }
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          PrecomputedTableType self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as PrecomputedTableTypeImpl).frbInternalSseEncode(move: true),
-        serializer);
   }
 
   @protected
@@ -6510,16 +6628,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-          PrecomputedTableType self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as PrecomputedTableTypeImpl).frbInternalSseEncode(move: null),
-        serializer);
-  }
-
-  @protected
-  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(
           PrecomputedTablesShared self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -6711,6 +6819,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       HistoryPageFilter self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_history_page_filter(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_precomputed_table_type(
+      PrecomputedTableType self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_precomputed_table_type(self, serializer);
   }
 
   @protected
@@ -6999,6 +7114,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_precomputed_table_type(
+      PrecomputedTableType self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case PrecomputedTableType_L1Low():
+        sse_encode_i_32(0, serializer);
+      case PrecomputedTableType_L1Medium():
+        sse_encode_i_32(1, serializer);
+      case PrecomputedTableType_L1Full():
+        sse_encode_i_32(2, serializer);
+      case PrecomputedTableType_Custom(field0: final field0):
+        sse_encode_i_32(3, serializer);
+        sse_encode_usize(field0, serializer);
+    }
+  }
+
+  @protected
   void
       sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_transaction_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_transaction_builder_state(
           (Transaction, TransactionBuilderState) self,
@@ -7085,6 +7217,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.assetHash, serializer);
     sse_encode_opt_String(self.extraData, serializer);
     sse_encode_opt_box_autoadd_bool(self.encryptExtraData, serializer);
+  }
+
+  @protected
+  void sse_encode_u_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint32(self);
   }
 
   @protected
@@ -7293,28 +7431,6 @@ class LevelFilterImpl extends RustOpaque implements LevelFilter {
         RustLib.instance.api.rust_arc_decrement_strong_count_LevelFilter,
     rustArcDecrementStrongCountPtr:
         RustLib.instance.api.rust_arc_decrement_strong_count_LevelFilterPtr,
-  );
-}
-
-@sealed
-class PrecomputedTableTypeImpl extends RustOpaque
-    implements PrecomputedTableType {
-  // Not to be used by end users
-  PrecomputedTableTypeImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
-
-  // Not to be used by end users
-  PrecomputedTableTypeImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_PrecomputedTableType,
-    rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_PrecomputedTableType,
-    rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_PrecomputedTableTypePtr,
   );
 }
 

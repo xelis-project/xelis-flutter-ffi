@@ -44,7 +44,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 635383291;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -2056919388;
 
 // Section: executor
 
@@ -3424,6 +3424,38 @@ fn wire__crate__api__models__address_book_dtos__address_book_data_get_all_entrie
         },
     )
 }
+fn wire__crate__api__precomputed_tables__are_precomputed_tables_available_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    precomputed_tables_path: impl CstDecode<String>,
+    precomputed_table_type: impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "are_precomputed_tables_available",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_precomputed_tables_path = precomputed_tables_path.cst_decode();
+            let api_precomputed_table_type = precomputed_table_type.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::precomputed_tables::are_precomputed_tables_available(
+                                api_precomputed_tables_path,
+                                api_precomputed_table_type,
+                            )
+                            .await,
+                        )?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__wallet__clear_asset_cache_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
@@ -3568,7 +3600,7 @@ fn wire__crate__api__wallet__create_xelis_wallet_impl(
     seed: impl CstDecode<Option<String>>,
     private_key: impl CstDecode<Option<String>>,
     precomputed_tables_path: impl CstDecode<Option<String>>,
-    precomputed_table_type: impl CstDecode<PrecomputedTableType>,
+    precomputed_table_type: impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -3835,7 +3867,7 @@ fn wire__crate__api__wallet__open_xelis_wallet_impl(
     password: impl CstDecode<String>,
     network: impl CstDecode<crate::api::network::Network>,
     precomputed_tables_path: impl CstDecode<Option<String>>,
-    precomputed_table_type: impl CstDecode<PrecomputedTableType>,
+    precomputed_table_type: impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -3865,6 +3897,78 @@ fn wire__crate__api__wallet__open_xelis_wallet_impl(
                         Ok(output_ok)
                     })()
                     .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__precomputed_tables__precomputed_table_type_index_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "precomputed_table_type_index",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(
+                        crate::api::precomputed_tables::PrecomputedTableType::index(&api_that),
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__precomputed_tables__precomputed_table_type_name_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "precomputed_table_type_name",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(
+                        crate::api::precomputed_tables::PrecomputedTableType::name(&api_that),
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "precomputed_table_type_to_l1_size",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok =
+                            crate::api::precomputed_tables::PrecomputedTableType::to_l1_size(
+                                &api_that,
+                            )?;
+                        Ok(output_ok)
+                    })(),
                 )
             }
         },
@@ -3955,7 +4059,7 @@ fn wire__crate__api__utils__split_integrated_address_json_impl(
 fn wire__crate__api__wallet__update_tables_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     precomputed_tables_path: impl CstDecode<String>,
-    precomputed_table_type: impl CstDecode<PrecomputedTableType>,
+    precomputed_table_type: impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -4221,6 +4325,12 @@ impl CstDecode<crate::api::models::xswd_dtos::PermissionPolicy> for i32 {
         }
     }
 }
+impl CstDecode<u32> for u32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> u32 {
+        self
+    }
+}
 impl CstDecode<u64> for u64 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> u64 {
@@ -4294,16 +4404,6 @@ impl SseDecode for LevelFilter {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <RustOpaqueNom<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>,
-        >>::sse_decode(deserializer);
-        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
-    }
-}
-
-impl SseDecode for PrecomputedTableType {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <RustOpaqueNom<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
     }
@@ -4489,16 +4589,6 @@ impl SseDecode
 
 impl SseDecode
     for RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>>
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <usize>::sse_decode(deserializer);
-        return unsafe { decode_rust_opaque_nom(inner) };
-    }
-}
-
-impl SseDecode
-    for RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -5036,6 +5126,31 @@ impl SseDecode for crate::api::models::xswd_dtos::PermissionPolicy {
     }
 }
 
+impl SseDecode for crate::api::precomputed_tables::PrecomputedTableType {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                return crate::api::precomputed_tables::PrecomputedTableType::L1Low;
+            }
+            1 => {
+                return crate::api::precomputed_tables::PrecomputedTableType::L1Medium;
+            }
+            2 => {
+                return crate::api::precomputed_tables::PrecomputedTableType::L1Full;
+            }
+            3 => {
+                let mut var_field0 = <usize>::sse_decode(deserializer);
+                return crate::api::precomputed_tables::PrecomputedTableType::Custom(var_field0);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseDecode for (Transaction, TransactionBuilderState) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -5153,6 +5268,13 @@ impl SseDecode for crate::api::models::wallet_dtos::Transfer {
             extra_data: var_extraData,
             encrypt_extra_data: var_encryptExtraData,
         };
+    }
+}
+
+impl SseDecode for u32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_u32::<NativeEndian>().unwrap()
     }
 }
 
@@ -5370,24 +5492,6 @@ impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<
 
 impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<LevelFilter>> for LevelFilter {
     fn into_into_dart(self) -> FrbWrapper<LevelFilter> {
-        self.into()
-    }
-}
-
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for FrbWrapper<PrecomputedTableType> {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, StdArc<_>>(self.0)
-            .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for FrbWrapper<PrecomputedTableType>
-{
-}
-
-impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<PrecomputedTableType>> for PrecomputedTableType {
-    fn into_into_dart(self) -> FrbWrapper<PrecomputedTableType> {
         self.into()
     }
 }
@@ -5729,6 +5833,39 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::models::xswd_dtos::Permission
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::precomputed_tables::PrecomputedTableType {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::precomputed_tables::PrecomputedTableType::L1Low => {
+                [0.into_dart()].into_dart()
+            }
+            crate::api::precomputed_tables::PrecomputedTableType::L1Medium => {
+                [1.into_dart()].into_dart()
+            }
+            crate::api::precomputed_tables::PrecomputedTableType::L1Full => {
+                [2.into_dart()].into_dart()
+            }
+            crate::api::precomputed_tables::PrecomputedTableType::Custom(field0) => {
+                [3.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::precomputed_tables::PrecomputedTableType
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::precomputed_tables::PrecomputedTableType>
+    for crate::api::precomputed_tables::PrecomputedTableType
+{
+    fn into_into_dart(self) -> crate::api::precomputed_tables::PrecomputedTableType {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::progress_report::Report {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -5984,18 +6121,6 @@ impl SseEncode for LevelFilter {
     }
 }
 
-impl SseEncode for PrecomputedTableType {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <RustOpaqueNom<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
-        >>::sse_encode(
-            flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, StdArc<_>>(self),
-            serializer,
-        );
-    }
-}
-
 impl SseEncode for PrecomputedTablesShared {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -6168,17 +6293,6 @@ impl SseEncode
 
 impl SseEncode
     for RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>>
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        let (ptr, size) = self.sse_encode_raw();
-        <usize>::sse_encode(ptr, serializer);
-        <i32>::sse_encode(size, serializer);
-    }
-}
-
-impl SseEncode
-    for RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -6657,6 +6771,30 @@ impl SseEncode for crate::api::models::xswd_dtos::PermissionPolicy {
     }
 }
 
+impl SseEncode for crate::api::precomputed_tables::PrecomputedTableType {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::precomputed_tables::PrecomputedTableType::L1Low => {
+                <i32>::sse_encode(0, serializer);
+            }
+            crate::api::precomputed_tables::PrecomputedTableType::L1Medium => {
+                <i32>::sse_encode(1, serializer);
+            }
+            crate::api::precomputed_tables::PrecomputedTableType::L1Full => {
+                <i32>::sse_encode(2, serializer);
+            }
+            crate::api::precomputed_tables::PrecomputedTableType::Custom(field0) => {
+                <i32>::sse_encode(3, serializer);
+                <usize>::sse_encode(field0, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseEncode for (Transaction, TransactionBuilderState) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -6751,6 +6889,13 @@ impl SseEncode for crate::api::models::wallet_dtos::Transfer {
         <String>::sse_encode(self.asset_hash, serializer);
         <Option<String>>::sse_encode(self.extra_data, serializer);
         <Option<bool>>::sse_encode(self.encrypt_extra_data, serializer);
+    }
+}
+
+impl SseEncode for u32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_u32::<NativeEndian>(self).unwrap();
     }
 }
 
@@ -6947,18 +7092,6 @@ mod io {
         fn cst_decode(self) -> LevelFilter {
             flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(CstDecode::<
                 RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>>,
-            >::cst_decode(
-                self
-            ))
-        }
-    }
-    impl CstDecode<PrecomputedTableType> for usize {
-        // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> PrecomputedTableType {
-            flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(CstDecode::<
-                RustOpaqueNom<
-                    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
-                >,
             >::cst_decode(
                 self
             ))
@@ -7191,22 +7324,6 @@ mod io {
             self,
         ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>>
         {
-            unsafe { decode_rust_opaque_nom(self as _) }
-        }
-    }
-    impl
-        CstDecode<
-            RustOpaqueNom<
-                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
-            >,
-        > for usize
-    {
-        // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(
-            self,
-        ) -> RustOpaqueNom<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
-        > {
             unsafe { decode_rust_opaque_nom(self as _) }
         }
     }
@@ -7457,6 +7574,16 @@ mod io {
                 .into()
         }
     }
+    impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>
+        for *mut wire_cst_precomputed_table_type
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::precomputed_tables::PrecomputedTableType {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::precomputed_tables::PrecomputedTableType>::cst_decode(*wrap)
+                .into()
+        }
+    }
     impl CstDecode<crate::api::progress_report::Report> for *mut wire_cst_report {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::progress_report::Report {
@@ -7659,6 +7786,25 @@ mod io {
                 level: self.level.cst_decode(),
                 tag: self.tag.cst_decode(),
                 msg: self.msg.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>
+        for wire_cst_precomputed_table_type
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::precomputed_tables::PrecomputedTableType {
+            match self.tag {
+                0 => crate::api::precomputed_tables::PrecomputedTableType::L1Low,
+                1 => crate::api::precomputed_tables::PrecomputedTableType::L1Medium,
+                2 => crate::api::precomputed_tables::PrecomputedTableType::L1Full,
+                3 => {
+                    let ans = unsafe { self.kind.Custom };
+                    crate::api::precomputed_tables::PrecomputedTableType::Custom(
+                        ans.field0.cst_decode(),
+                    )
+                }
+                _ => unreachable!(),
             }
         }
     }
@@ -7894,6 +8040,19 @@ mod io {
         }
     }
     impl Default for wire_cst_log_entry {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_precomputed_table_type {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                tag: -1,
+                kind: PrecomputedTableTypeKind { nil__: () },
+            }
+        }
+    }
+    impl Default for wire_cst_precomputed_table_type {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -8803,6 +8962,19 @@ field1: Default::default(), }
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__precomputed_tables__are_precomputed_tables_available(
+        port_: i64,
+        precomputed_tables_path: *mut wire_cst_list_prim_u_8_strict,
+        precomputed_table_type: *mut wire_cst_precomputed_table_type,
+    ) {
+        wire__crate__api__precomputed_tables__are_precomputed_tables_available_impl(
+            port_,
+            precomputed_tables_path,
+            precomputed_table_type,
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__wallet__clear_asset_cache(
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__wallet__clear_asset_cache_impl()
@@ -8848,7 +9020,7 @@ field1: Default::default(), }
         seed: *mut wire_cst_list_prim_u_8_strict,
         private_key: *mut wire_cst_list_prim_u_8_strict,
         precomputed_tables_path: *mut wire_cst_list_prim_u_8_strict,
-        precomputed_table_type: usize,
+        precomputed_table_type: *mut wire_cst_precomputed_table_type,
     ) {
         wire__crate__api__wallet__create_xelis_wallet_impl(
             port_,
@@ -8947,7 +9119,7 @@ field1: Default::default(), }
         password: *mut wire_cst_list_prim_u_8_strict,
         network: i32,
         precomputed_tables_path: *mut wire_cst_list_prim_u_8_strict,
-        precomputed_table_type: usize,
+        precomputed_table_type: *mut wire_cst_precomputed_table_type,
     ) {
         wire__crate__api__wallet__open_xelis_wallet_impl(
             port_,
@@ -8958,6 +9130,30 @@ field1: Default::default(), }
             precomputed_tables_path,
             precomputed_table_type,
         )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_index(
+        port_: i64,
+        that: *mut wire_cst_precomputed_table_type,
+    ) {
+        wire__crate__api__precomputed_tables__precomputed_table_type_index_impl(port_, that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_name(
+        port_: i64,
+        that: *mut wire_cst_precomputed_table_type,
+    ) {
+        wire__crate__api__precomputed_tables__precomputed_table_type_name_impl(port_, that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size(
+        port_: i64,
+        that: *mut wire_cst_precomputed_table_type,
+    ) {
+        wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size_impl(port_, that)
     }
 
     #[unsafe(no_mangle)]
@@ -8990,7 +9186,7 @@ field1: Default::default(), }
     pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__wallet__update_tables(
         port_: i64,
         precomputed_tables_path: *mut wire_cst_list_prim_u_8_strict,
-        precomputed_table_type: usize,
+        precomputed_table_type: *mut wire_cst_precomputed_table_type,
     ) {
         wire__crate__api__wallet__update_tables_impl(
             port_,
@@ -9133,24 +9329,6 @@ field1: Default::default(), }
     ) {
         unsafe {
             StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>>::decrement_strong_count(ptr as _);
-        }
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-        ptr: *const std::ffi::c_void,
-    ) {
-        unsafe {
-            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>>::increment_strong_count(ptr as _);
-        }
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-        ptr: *const std::ffi::c_void,
-    ) {
-        unsafe {
-            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>>::decrement_strong_count(ptr as _);
         }
     }
 
@@ -9364,6 +9542,14 @@ field1: Default::default(), }
     ) -> *mut wire_cst_history_page_filter {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(
             wire_cst_history_page_filter::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_cst_new_box_autoadd_precomputed_table_type(
+    ) -> *mut wire_cst_precomputed_table_type {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_precomputed_table_type::new_with_null_ptr(),
         )
     }
 
@@ -9656,6 +9842,23 @@ field1: Default::default(), }
         level: i32,
         tag: *mut wire_cst_list_prim_u_8_strict,
         msg: *mut wire_cst_list_prim_u_8_strict,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_precomputed_table_type {
+        tag: i32,
+        kind: PrecomputedTableTypeKind,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub union PrecomputedTableTypeKind {
+        Custom: wire_cst_PrecomputedTableType_Custom,
+        nil__: (),
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_PrecomputedTableType_Custom {
+        field0: usize,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
@@ -10133,6 +10336,23 @@ mod web {
             self.map(CstDecode::cst_decode)
         }
     }
+    impl CstDecode<crate::api::precomputed_tables::PrecomputedTableType>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::precomputed_tables::PrecomputedTableType {
+            let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
+            match self_.get(0).unchecked_into_f64() as _ {
+                0 => crate::api::precomputed_tables::PrecomputedTableType::L1Low,
+                1 => crate::api::precomputed_tables::PrecomputedTableType::L1Medium,
+                2 => crate::api::precomputed_tables::PrecomputedTableType::L1Full,
+                3 => crate::api::precomputed_tables::PrecomputedTableType::Custom(
+                    self_.get(1).cst_decode(),
+                ),
+                _ => unreachable!(),
+            }
+        }
+    }
     impl CstDecode<(Transaction, TransactionBuilderState)>
         for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
     {
@@ -10432,18 +10652,6 @@ mod web {
             ))
         }
     }
-    impl CstDecode<PrecomputedTableType> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
-        // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> PrecomputedTableType {
-            flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(CstDecode::<
-                RustOpaqueNom<
-                    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
-                >,
-            >::cst_decode(
-                self
-            ))
-        }
-    }
     impl CstDecode<PrecomputedTablesShared>
         for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
     {
@@ -10691,26 +10899,6 @@ mod web {
             self,
         ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>>
         {
-            #[cfg(target_pointer_width = "64")]
-            {
-                compile_error!("64-bit pointers are not supported.");
-            }
-            unsafe { decode_rust_opaque_nom((self.as_f64().unwrap() as usize) as _) }
-        }
-    }
-    impl
-        CstDecode<
-            RustOpaqueNom<
-                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
-            >,
-        > for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
-    {
-        // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(
-            self,
-        ) -> RustOpaqueNom<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>,
-        > {
             #[cfg(target_pointer_width = "64")]
             {
                 compile_error!("64-bit pointers are not supported.");
@@ -10989,6 +11177,12 @@ mod web {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::models::xswd_dtos::PermissionPolicy {
             (self.unchecked_into_f64() as i32).cst_decode()
+        }
+    }
+    impl CstDecode<u32> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> u32 {
+            self.unchecked_into_f64() as _
         }
     }
     impl CstDecode<u64> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
@@ -11749,6 +11943,19 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn wire__crate__api__precomputed_tables__are_precomputed_tables_available(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        precomputed_tables_path: String,
+        precomputed_table_type: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__precomputed_tables__are_precomputed_tables_available_impl(
+            port_,
+            precomputed_tables_path,
+            precomputed_table_type,
+        )
+    }
+
+    #[wasm_bindgen]
     pub fn wire__crate__api__wallet__clear_asset_cache(
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__wallet__clear_asset_cache_impl()
@@ -11906,6 +12113,30 @@ mod web {
             precomputed_tables_path,
             precomputed_table_type,
         )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__precomputed_tables__precomputed_table_type_index(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__precomputed_tables__precomputed_table_type_index_impl(port_, that)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__precomputed_tables__precomputed_table_type_name(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__precomputed_tables__precomputed_table_type_name_impl(port_, that)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size_impl(port_, that)
     }
 
     #[wasm_bindgen]
@@ -12083,24 +12314,6 @@ mod web {
     ) {
         unsafe {
             StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LevelFilter>>::decrement_strong_count(ptr as _);
-        }
-    }
-
-    #[wasm_bindgen]
-    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-        ptr: *const std::ffi::c_void,
-    ) {
-        unsafe {
-            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>>::increment_strong_count(ptr as _);
-        }
-    }
-
-    #[wasm_bindgen]
-    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(
-        ptr: *const std::ffi::c_void,
-    ) {
-        unsafe {
-            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>>::decrement_strong_count(ptr as _);
         }
     }
 

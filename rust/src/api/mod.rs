@@ -3,7 +3,7 @@ pub mod logger;
 pub mod network;
 pub mod models;
 pub mod progress_report;
-pub mod table_generation;
+pub mod precomputed_tables;
 pub mod seed_search_engine;
 pub mod utils;
 pub mod wallet;

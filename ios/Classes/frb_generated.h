@@ -110,6 +110,19 @@ typedef struct wire_cst_address_book_data {
   struct wire_cst_list_record_string_contact_details *contacts;
 } wire_cst_address_book_data;
 
+typedef struct wire_cst_PrecomputedTableType_Custom {
+  uintptr_t field0;
+} wire_cst_PrecomputedTableType_Custom;
+
+typedef union PrecomputedTableTypeKind {
+  struct wire_cst_PrecomputedTableType_Custom Custom;
+} PrecomputedTableTypeKind;
+
+typedef struct wire_cst_precomputed_table_type {
+  int32_t tag;
+  union PrecomputedTableTypeKind kind;
+} wire_cst_precomputed_table_type;
+
 typedef struct wire_cst_XswdRequestType_Permission {
   struct wire_cst_list_prim_u_8_strict *field0;
 } wire_cst_XswdRequestType_Permission;
@@ -486,6 +499,10 @@ void frbgen_xelis_flutter_wire__crate__api__progress_report__add_progress_report
 void frbgen_xelis_flutter_wire__crate__api__models__address_book_dtos__address_book_data_get_all_entries(int64_t port_,
                                                                                                          struct wire_cst_address_book_data *that);
 
+void frbgen_xelis_flutter_wire__crate__api__precomputed_tables__are_precomputed_tables_available(int64_t port_,
+                                                                                                 struct wire_cst_list_prim_u_8_strict *precomputed_tables_path,
+                                                                                                 struct wire_cst_precomputed_table_type *precomputed_table_type);
+
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__clear_asset_cache(void);
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__clear_cached_tables(void);
@@ -507,7 +524,7 @@ void frbgen_xelis_flutter_wire__crate__api__wallet__create_xelis_wallet(int64_t 
                                                                         struct wire_cst_list_prim_u_8_strict *seed,
                                                                         struct wire_cst_list_prim_u_8_strict *private_key,
                                                                         struct wire_cst_list_prim_u_8_strict *precomputed_tables_path,
-                                                                        uintptr_t precomputed_table_type);
+                                                                        struct wire_cst_precomputed_table_type *precomputed_table_type);
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__drop_wallet(uintptr_t wallet);
 
@@ -539,7 +556,16 @@ void frbgen_xelis_flutter_wire__crate__api__wallet__open_xelis_wallet(int64_t po
                                                                       struct wire_cst_list_prim_u_8_strict *password,
                                                                       int32_t network,
                                                                       struct wire_cst_list_prim_u_8_strict *precomputed_tables_path,
-                                                                      uintptr_t precomputed_table_type);
+                                                                      struct wire_cst_precomputed_table_type *precomputed_table_type);
+
+void frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_index(int64_t port_,
+                                                                                             struct wire_cst_precomputed_table_type *that);
+
+void frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_name(int64_t port_,
+                                                                                            struct wire_cst_precomputed_table_type *that);
+
+void frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size(int64_t port_,
+                                                                                                  struct wire_cst_precomputed_table_type *that);
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__refresh_mt_params(void);
 
@@ -552,7 +578,7 @@ WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__split_integra
 
 void frbgen_xelis_flutter_wire__crate__api__wallet__update_tables(int64_t port_,
                                                                   struct wire_cst_list_prim_u_8_strict *precomputed_tables_path,
-                                                                  uintptr_t precomputed_table_type);
+                                                                  struct wire_cst_precomputed_table_type *precomputed_table_type);
 
 void frbgen_xelis_flutter_wire__crate__api__xswd__imp__xswd_handler(int64_t port_,
                                                                     uintptr_t receiver,
@@ -588,10 +614,6 @@ void frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rus
 void frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter(const void *ptr);
 
 void frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter(const void *ptr);
-
-void frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(const void *ptr);
-
-void frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType(const void *ptr);
 
 void frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared(const void *ptr);
 
@@ -639,6 +661,8 @@ bool *frbgen_xelis_flutter_cst_new_box_autoadd_bool(bool value);
 
 struct wire_cst_history_page_filter *frbgen_xelis_flutter_cst_new_box_autoadd_history_page_filter(void);
 
+struct wire_cst_precomputed_table_type *frbgen_xelis_flutter_cst_new_box_autoadd_precomputed_table_type(void);
+
 struct wire_cst_report *frbgen_xelis_flutter_cst_new_box_autoadd_report(void);
 
 uint64_t *frbgen_xelis_flutter_cst_new_box_autoadd_u_64(uint64_t value);
@@ -677,6 +701,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_cst_new_box_autoadd_address_book_data);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_cst_new_box_autoadd_bool);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_cst_new_box_autoadd_history_page_filter);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_cst_new_box_autoadd_precomputed_table_type);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_cst_new_box_autoadd_report);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_cst_new_box_autoadd_u_64);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_cst_new_box_autoadd_usize);
@@ -698,7 +723,6 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDataElement);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIntegratedAddress);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter);
-    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSearchEngine);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendToDartLogger);
@@ -713,7 +737,6 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDataElement);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIntegratedAddress);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLevelFilter);
-    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTableType);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPrecomputedTablesShared);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSearchEngine);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendToDartLogger);
@@ -746,6 +769,10 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_application_request);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_cancel_request);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__precomputed_tables__are_precomputed_tables_available);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_index);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_name);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_to_l1_size);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__progress_report__add_progress_report);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__seed_search_engine__SearchEngine_check_seed);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__seed_search_engine__SearchEngine_init);

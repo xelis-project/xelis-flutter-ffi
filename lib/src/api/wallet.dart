@@ -8,6 +8,7 @@ import 'models/wallet_dtos.dart';
 import 'models/xswd_dtos.dart';
 import 'network.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'precomputed_tables.dart';
 import 'xswd/imp.dart';
 
 // These functions are ignored because they are not marked as `pub`: `build_unsigned_transaction`, `convert_float_amount`, `create_transfers`, `get_asset_data`, `get_mt_params`, `init_asset_cache`
@@ -77,9 +78,6 @@ Future<XelisWallet> openXelisWallet(
         network: network,
         precomputedTablesPath: precomputedTablesPath,
         precomputedTableType: precomputedTableType);
-
-// Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTableType>>
-abstract class PrecomputedTableType implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PrecomputedTablesShared>>
 abstract class PrecomputedTablesShared implements RustOpaqueInterface {}
