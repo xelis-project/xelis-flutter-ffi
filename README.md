@@ -11,6 +11,8 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/to/develop-packages).
 -->
 
+## NEEDS UPDATING
+
 # Xelis Wallet FFI Bindings for Flutter
 This repo is setup to be a shoe-in library in flutter applications, allowing easy access to the native Rust wallet methods from `xelis-blockchain` without the need for any rewrites. This is enabled by the `flutter_rust_bridge_codegen` tool, as well as the automated build & dependency conventions used within this repository. 
 
