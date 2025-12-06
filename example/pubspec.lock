@@ -468,7 +468,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "7ac5530677d9c9e2d4cf20528f3433ef7fd47cd3"
+      resolved-ref: a5f2ca0e4b0c0a8a98ba68b33563e31213fe84c4
       url: "https://github.com/Tritonn204/xelis-dart-sdk"
     source: git
     version: "0.29.0"
