@@ -4310,22 +4310,6 @@ class RustLibWire implements BaseWire {
       _wire__crate__api__utils__get_mnemonic_wordsPtr
           .asFunction<WireSyncRust2DartDco Function(int)>();
 
-  void wire__crate__api__models__wallet_dtos__history_page_filter_default(
-    int port_,
-  ) {
-    return _wire__crate__api__models__wallet_dtos__history_page_filter_default(
-      port_,
-    );
-  }
-
-  late final _wire__crate__api__models__wallet_dtos__history_page_filter_defaultPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
-    'frbgen_xelis_flutter_wire__crate__api__models__wallet_dtos__history_page_filter_default',
-  );
-  late final _wire__crate__api__models__wallet_dtos__history_page_filter_default =
-      _wire__crate__api__models__wallet_dtos__history_page_filter_defaultPtr
-          .asFunction<void Function(int)>();
-
   void wire__crate__api__logger__init_logger(int port_) {
     return _wire__crate__api__logger__init_logger(port_);
   }

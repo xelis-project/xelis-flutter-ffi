@@ -12,7 +12,7 @@ import 'precomputed_tables.dart';
 import 'xswd/imp.dart';
 
 // These functions are ignored because they are not marked as `pub`: `build_unsigned_transaction`, `convert_float_amount`, `create_transfers`, `get_asset_data`, `get_mt_params`, `init_asset_cache`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `from`
 // These functions are ignored (category: IgnoreBecauseExplicitAttribute): `get_wallet`
 
 void clearAssetCache() => RustLib.instance.api.crateApiWalletClearAssetCache();

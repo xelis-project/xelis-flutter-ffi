@@ -383,7 +383,7 @@ extension HistoryPageFilterPatterns on HistoryPageFilter {
 
 /// @nodoc
 
-class _HistoryPageFilter extends HistoryPageFilter {
+class _HistoryPageFilter implements HistoryPageFilter {
   const _HistoryPageFilter(
       {required this.page,
       this.limit,
@@ -394,8 +394,7 @@ class _HistoryPageFilter extends HistoryPageFilter {
       required this.acceptIncoming,
       required this.acceptOutgoing,
       required this.acceptCoinbase,
-      required this.acceptBurn})
-      : super._();
+      required this.acceptBurn});
 
   @override
   final BigInt page;

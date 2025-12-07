@@ -80,7 +80,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -2056919388;
+  int get rustContentHash => 2069668589;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -388,8 +388,6 @@ abstract class RustLibApi extends BaseApi {
   BigInt crateApiUtilsGetLanguageIndexFromStr({required String input});
 
   List<String> crateApiUtilsGetMnemonicWords({required BigInt languageIndex});
-
-  Future<HistoryPageFilter> crateApiModelsWalletDtosHistoryPageFilterDefault();
 
   Future<void> crateApiLoggerInitLogger();
 
@@ -3250,31 +3248,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         debugName: "get_mnemonic_words",
         argNames: ["languageIndex"],
       );
-
-  @override
-  Future<HistoryPageFilter> crateApiModelsWalletDtosHistoryPageFilterDefault() {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        return wire
-            .wire__crate__api__models__wallet_dtos__history_page_filter_default(
-                port_);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_history_page_filter,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiModelsWalletDtosHistoryPageFilterDefaultConstMeta,
-      argValues: [],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiModelsWalletDtosHistoryPageFilterDefaultConstMeta =>
-          const TaskConstMeta(
-            debugName: "history_page_filter_default",
-            argNames: [],
-          );
 
   @override
   Future<void> crateApiLoggerInitLogger() {

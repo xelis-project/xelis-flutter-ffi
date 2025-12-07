@@ -44,7 +44,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -2056919388;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 2069668589;
 
 // Section: executor
 
@@ -3796,27 +3796,6 @@ fn wire__crate__api__utils__get_mnemonic_words_impl(
                     Result::<_, ()>::Ok(crate::api::utils::get_mnemonic_words(api_language_index))?;
                 Ok(output_ok)
             })())
-        },
-    )
-}
-fn wire__crate__api__models__wallet_dtos__history_page_filter_default_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "history_page_filter_default",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            move |context| {
-                transform_result_dco::<_, _, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(
-                        crate::api::models::wallet_dtos::HistoryPageFilter::default(),
-                    )?;
-                    Ok(output_ok)
-                })())
-            }
         },
     )
 }
@@ -9093,13 +9072,6 @@ field1: Default::default(), }
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__models__wallet_dtos__history_page_filter_default(
-        port_: i64,
-    ) {
-        wire__crate__api__models__wallet_dtos__history_page_filter_default_impl(port_)
-    }
-
-    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__logger__init_logger(port_: i64) {
         wire__crate__api__logger__init_logger_impl(port_)
     }
@@ -12071,13 +12043,6 @@ mod web {
         language_index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__utils__get_mnemonic_words_impl(language_index)
-    }
-
-    #[wasm_bindgen]
-    pub fn wire__crate__api__models__wallet_dtos__history_page_filter_default(
-        port_: flutter_rust_bridge::for_generated::MessagePort,
-    ) {
-        wire__crate__api__models__wallet_dtos__history_page_filter_default_impl(port_)
     }
 
     #[wasm_bindgen]

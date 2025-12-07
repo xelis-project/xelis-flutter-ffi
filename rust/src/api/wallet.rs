@@ -34,8 +34,30 @@ pub use xelis_wallet::transaction_builder::TransactionBuilderState;
 pub use xelis_wallet::precomputed_tables::PrecomputedTablesShared;
 use xelis_wallet::wallet::{RecoverOption, Wallet};
 
+use super::models::wallet_dtos::{
+    HistoryPageFilter, MultisigDartPayload, ParticipantDartPayload, SignatureMultisig,
+    SummaryTransaction, Transfer, XelisAssetMetadata, XelisAssetOwner
+};
+
 use super::precomputed_tables::{LogProgressTableGenerationReportFunction, PrecomputedTableType};
 use crate::frb_generated::StreamSink;
+
+impl From<&AssetOwner> for XelisAssetOwner {
+    fn from(value: &AssetOwner) -> Self {
+        match value {
+            AssetOwner::None => XelisAssetOwner::None,
+            AssetOwner::Creator { contract, id } => XelisAssetOwner::Creator {
+                contract: contract.to_hex(),
+                id: *id,
+            },
+            AssetOwner::Owner { origin, origin_id, owner } => XelisAssetOwner::Owner {
+                origin: origin.to_hex(),
+                origin_id: *origin_id,
+                owner: owner.to_hex(),
+            },
+        }
+    }
+}
 
 // ============================================================================
 // FFI Tracing Macros
@@ -55,93 +77,6 @@ macro_rules! ffi_exit {
         let duration = $start_time.elapsed();
         trace!("FFI_EXIT: {} on thread {:?} - took {:?}", $func_name, $thread_id, duration);
     }};
-}
-
-// ============================================================================
-// Data Transfer Objects (DTOs)
-// ============================================================================
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-#[frb(dart_metadata=("freezed"))]
-pub struct SummaryTransaction {
-    pub hash: String,
-    pub fee: u64,
-    pub transaction_type: TransactionTypeBuilder,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub enum XelisAssetOwner {
-    None,
-    Creator { contract: String, id: u64 },
-    Owner { origin: String, origin_id: u64, owner: String },
-}
-
-impl From<&AssetOwner> for XelisAssetOwner {
-    fn from(value: &AssetOwner) -> Self {
-        match value {
-            AssetOwner::None => XelisAssetOwner::None,
-            AssetOwner::Creator { contract, id } => XelisAssetOwner::Creator {
-                contract: contract.to_hex(),
-                id: *id,
-            },
-            AssetOwner::Owner { origin, origin_id, owner } => XelisAssetOwner::Owner {
-                origin: origin.to_hex(),
-                origin_id: *origin_id,
-                owner: owner.to_hex(),
-            },
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct XelisAssetMetadata {
-    pub name: String,
-    pub ticker: String,
-    pub decimals: u8,
-    pub max_supply: u64,
-    pub owner: Option<XelisAssetOwner>,
-}
-
-#[derive(Clone, Debug)]
-pub struct Transfer {
-    pub float_amount: f64,
-    pub str_address: String,
-    pub asset_hash: String,
-    pub extra_data: Option<String>,
-    pub encrypt_extra_data: Option<bool>,
-}
-
-#[derive(Clone, Debug, Default)]
-pub struct HistoryPageFilter {
-    pub page: usize,
-    pub limit: Option<usize>,
-    pub address: Option<String>,
-    pub asset_hash: Option<String>,
-    pub min_topoheight: Option<u64>,
-    pub max_topoheight: Option<u64>,
-    pub accept_incoming: bool,
-    pub accept_outgoing: bool,
-    pub accept_coinbase: bool,
-    pub accept_burn: bool,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct MultisigDartPayload {
-    pub threshold: u8,
-    pub participants: Vec<ParticipantDartPayload>,
-    pub topoheight: u64,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct ParticipantDartPayload {
-    pub id: u8,
-    pub address: String,
-}
-
-#[derive(Clone, Debug)]
-pub struct SignatureMultisig {
-    pub id: u8,
-    pub signature: String,
 }
 
 // ============================================================================
@@ -645,7 +580,7 @@ impl XelisWallet {
         for res in storage.get_assets_with_data().await? {
             match res {
                 Ok((asset, data)) => {
-                    if !storage.is_asset_tracked(&asset)? {
+                    if !storage.is_asset_tracked(&asset).await? {
                         continue;
                     }
                     match storage.get_balance_for(&asset).await {
@@ -774,7 +709,7 @@ impl XelisWallet {
         let asset_hash = Hash::from_hex(&asset).context("Invalid asset")?;
 
         let storage = self.wallet.get_storage().read().await;
-        let result = storage.is_asset_tracked(&asset_hash);
+        let result = storage.is_asset_tracked(&asset_hash).await;
         ffi_exit!("is_asset_tracked", start_time, thread_id);
         result
     }

@@ -20,6 +20,7 @@ serde = { version = "1.0.197", features = ["derive"] }
 trie-rs = "0.4.2"
 bytemuck_derive = "=1.8.1"
 lru = "0.12"
+indexmap = { version = "2.0.0", features = ["serde"] }
 
 [build-dependencies]
 flutter_rust_bridge_codegen = "2.9.0" 

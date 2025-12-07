@@ -40,7 +40,6 @@ abstract class SummaryTransaction implements RustOpaqueInterface {
 
 @freezed
 sealed class HistoryPageFilter with _$HistoryPageFilter {
-  const HistoryPageFilter._();
   const factory HistoryPageFilter({
     required BigInt page,
     BigInt? limit,
@@ -53,8 +52,6 @@ sealed class HistoryPageFilter with _$HistoryPageFilter {
     required bool acceptCoinbase,
     required bool acceptBurn,
   }) = _HistoryPageFilter;
-  static Future<HistoryPageFilter> default_() =>
-      RustLib.instance.api.crateApiModelsWalletDtosHistoryPageFilterDefault();
 }
 
 @freezed

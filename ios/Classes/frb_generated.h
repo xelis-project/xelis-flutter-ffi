@@ -544,8 +544,6 @@ WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__get_language_
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__get_mnemonic_words(uintptr_t language_index);
 
-void frbgen_xelis_flutter_wire__crate__api__models__wallet_dtos__history_page_filter_default(int64_t port_);
-
 void frbgen_xelis_flutter_wire__crate__api__logger__init_logger(int64_t port_);
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__is_address_valid(struct wire_cst_list_prim_u_8_strict *str_address);
@@ -764,7 +762,6 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__wallet_dtos__SummaryTransaction_auto_accessor_set_fee);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__wallet_dtos__SummaryTransaction_auto_accessor_set_hash);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__wallet_dtos__SummaryTransaction_auto_accessor_set_transaction_type);
-    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__wallet_dtos__history_page_filter_default);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_app_disconnect);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_application_request);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_cancel_request);

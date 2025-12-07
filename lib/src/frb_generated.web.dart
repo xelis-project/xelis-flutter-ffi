@@ -2655,12 +2655,6 @@ class RustLibWire implements BaseWire {
           wasmModule
               .wire__crate__api__utils__get_mnemonic_words(language_index);
 
-  void wire__crate__api__models__wallet_dtos__history_page_filter_default(
-          NativePortType port_) =>
-      wasmModule
-          .wire__crate__api__models__wallet_dtos__history_page_filter_default(
-              port_);
-
   void wire__crate__api__logger__init_logger(NativePortType port_) =>
       wasmModule.wire__crate__api__logger__init_logger(port_);
 
@@ -3282,10 +3276,6 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
 
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__utils__get_mnemonic_words(JSAny language_index);
-
-  external void
-      wire__crate__api__models__wallet_dtos__history_page_filter_default(
-          NativePortType port_);
 
   external void wire__crate__api__logger__init_logger(NativePortType port_);
 

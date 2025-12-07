@@ -4705,6 +4705,7 @@ dependencies = [
  "bytemuck_derive",
  "flutter_rust_bridge",
  "flutter_rust_bridge_codegen",
+ "indexmap",
  "lazy_static",
  "log",
  "lru 0.12.5",

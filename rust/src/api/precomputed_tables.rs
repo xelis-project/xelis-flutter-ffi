@@ -8,7 +8,7 @@ use xelis_common::crypto::ecdlp;
 use xelis_wallet::precomputed_tables;
 use serde::{Serialize, Deserialize};
 
-use crate::api::progress_report::{add_progress_report, ProgressReport};
+use crate::api::progress_report::{add_progress_report, Report};
 
 
 #[frb]
@@ -62,7 +62,7 @@ pub struct LogProgressTableGenerationReportFunction;
 impl ecdlp::ProgressTableGenerationReportFunction for LogProgressTableGenerationReportFunction {
     fn report(&self, progress: f64, step: ecdlp::ReportStep) -> ControlFlow<()> {
         let step_str = format!("{:?}", step);
-        add_progress_report(ProgressReport {
+        add_progress_report(Report::TableGeneration {
             progress,
             step: step_str,
             message: None,
