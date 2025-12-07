@@ -6,8 +6,8 @@ CargoKitPlugin.file = buildscript.sourceFile
 apply plugin: CargoKitPlugin
 
 class CargoKitExtension {
-    String manifestDir; // Relative path to folder containing Cargo.toml
-    String libname; // Library name within Cargo.toml. Must be a cdylib
+    String manifestDir // Relative path to folder containing Cargo.toml
+    String libname     // Library name within Cargo.toml. Must be a cdylib
 }
 
 abstract class CargoKitBuildTask extends DefaultTask {
@@ -28,10 +28,10 @@ abstract class CargoKitBuildTask extends DefaultTask {
     String sdkDirectory
 
     @Input
-    int compileSdkVersion;
+    int compileSdkVersion
 
     @Input
-    int minSdkVersion;
+    int minSdkVersion
 
     @Input
     String pluginFile
@@ -42,18 +42,17 @@ abstract class CargoKitBuildTask extends DefaultTask {
     @TaskAction
     def build() {
         if (project.cargokit.manifestDir == null) {
-            throw new GradleException("Property 'manifestDir' must be set on cargokit extension");
+            throw new GradleException("Property 'manifestDir' must be set on cargokit extension")
         }
 
         if (project.cargokit.libname == null) {
-            throw new GradleException("Property 'libname' must be set on cargokit extension");
+            throw new GradleException("Property 'libname' must be set on cargokit extension")
         }
 
         def executableName = Os.isFamily(Os.FAMILY_WINDOWS) ? "run_build_tool.cmd" : "run_build_tool.sh"
-        def path = Paths.get(new File(pluginFile).parent, "..", executableName);
+        def path = Paths.get(new File(pluginFile).parent, "..", executableName)
 
         def manifestDir = Paths.get(project.buildscript.sourceFile.parent, project.cargokit.manifestDir)
-
         def rootProjectDir = project.rootProject.projectDir
 
         if (!Os.isFamily(Os.FAMILY_WINDOWS)) {
@@ -83,95 +82,152 @@ abstract class CargoKitBuildTask extends DefaultTask {
 
 class CargoKitPlugin implements Plugin<Project> {
 
-    static String file;
+    static String file
 
     private Plugin findFlutterPlugin(Project rootProject) {
         _findFlutterPlugin(rootProject.childProjects)
     }
 
-   private Plugin _findFlutterPlugin(Map projects) {
-        for (project in projects) {
-            for (plugin in project.value.getPlugins()) {
-                if (plugin.class.name == "com.flutter.gradle.FlutterPlugin"
-                        || plugin.class.name == "FlutterPlugin") {
-                    return plugin;
+    /**
+     * Try to find the Flutter plugin by class name, supporting both old and new
+     * Flutter Gradle layouts.
+     */
+    private Plugin _findFlutterPlugin(Map projects) {
+        for (entry in projects) {
+            def proj = entry.value
+            for (plugin in proj.plugins) {
+                def name = plugin.class.name
+                if (name == "com.flutter.gradle.FlutterPlugin" ||
+                    name == "FlutterPlugin") {
+                    return plugin
                 }
             }
-            def plugin = _findFlutterPlugin(project.value.childProjects);
-            if (plugin != null) {
-                return plugin;
+            def nested = _findFlutterPlugin(proj.childProjects)
+            if (nested != null) {
+                return nested
             }
         }
-        return null;
+        return null
     }
 
     @Override
     void apply(Project project) {
-        def plugin = findFlutterPlugin(project.rootProject);
-
+        // Always create the extension so users can configure it even if plugin resolution fails
         project.extensions.create("cargokit", CargoKitExtension)
 
-        if (plugin == null) {
-            print("Flutter plugin not found, CargoKit plugin will not be applied.")
-            return;
+        def flutterPlugin = findFlutterPlugin(project.rootProject)
+
+        // Decide which Android project we treat as the "host" app/library.
+        Project hostProject = null
+        if (flutterPlugin != null) {
+            hostProject = flutterPlugin.project
+        } else {
+            // Fallback for newer Flutter / plugin-loader layouts:
+            // pick the first Android application project (usually :app)
+            hostProject = project.rootProject.subprojects.find {
+                it.plugins.hasPlugin("com.android.application")
+            }
+            if (hostProject != null) {
+                println "CargoKit: Flutter plugin not found; using ${hostProject.path} as host Android app."
+            }
+        }
+
+        if (hostProject == null) {
+            println "CargoKit: Flutter plugin not found and no Android application project; CargoKit plugin will not be applied."
+            return
+        }
+
+        def androidExt = hostProject.extensions.findByName("android")
+        if (androidExt == null) {
+            println "CargoKit: Host project ${hostProject.path} has no Android extension; CargoKit plugin will not be applied."
+            return
         }
 
         def cargoBuildDir = "${project.buildDir}/build"
 
-        // Determine if the project is an application or library
-        def isApplication = plugin.project.plugins.hasPlugin('com.android.application')
-        def variants = isApplication ? plugin.project.android.applicationVariants : plugin.project.android.libraryVariants
+        // Determine if the host project is an application or a library.
+        def isApplication = hostProject.plugins.hasPlugin("com.android.application")
+        def variants = isApplication ? androidExt.applicationVariants : androidExt.libraryVariants
 
         variants.all { variant ->
+            final String buildType = variant.buildType.name
 
-            final buildType = variant.buildType.name
-
-            def cargoOutputDir = "${project.buildDir}/jniLibs/${buildType}";
-            def jniLibs = project.android.sourceSets.maybeCreate(buildType).jniLibs;
+            def cargoOutputDir = "${project.buildDir}/jniLibs/${buildType}"
+            def jniLibs = project.android.sourceSets.maybeCreate(buildType).jniLibs
             jniLibs.srcDir(new File(cargoOutputDir))
 
-            def List<String> platforms
+            // Determine target platforms in a way that works across Flutter versions.
+            List<String> platforms
             try {
+                // Newer API (post 9b878b): static utility
                 platforms = com.flutter.gradle.FlutterPluginUtils
-                    .getTargetPlatforms(project).collect()
-            } catch (Exception ignored) {
-                platforms = plugin.getTargetPlatforms().collect()
+                        .getTargetPlatforms(hostProject)
+                        .collect()
+            } catch (Throwable ignored) {
+                // Older API: plugin instance exposes getTargetPlatforms()
+                if (flutterPlugin != null &&
+                        flutterPlugin.metaClass.respondsTo(flutterPlugin, "getTargetPlatforms")) {
+                    platforms = flutterPlugin.getTargetPlatforms().collect()
+                } else {
+                    // Final fallback: assume common Android targets
+                    platforms = ["android-arm", "android-arm64"]
+                }
             }
 
-            // Same thing addFlutterDependencies does in flutter.gradle
+            // Same behavior as addFlutterDependencies in flutter.gradle
             if (buildType == "debug") {
                 platforms.add("android-x86")
                 platforms.add("android-x64")
             }
 
-            // The task name depends on plugin properties, which are not available
-            // at this point
-            project.getGradle().afterProject {
-                def taskName = "cargokitCargoBuild${project.cargokit.libname.capitalize()}${buildType.capitalize()}";
+            // Delay task creation until the project is fully evaluated.
+            project.getGradle().afterProject { p ->
+                if (p != project) return
 
+                def taskName = "cargokitCargoBuild${project.cargokit.libname.capitalize()}${buildType.capitalize()}"
                 if (project.tasks.findByName(taskName)) {
                     return
                 }
 
-                if (plugin.project.android.ndkVersion == null) {
-                    throw new GradleException("Please set 'android.ndkVersion' in 'app/build.gradle'.")
+                def ndkVersionValue = androidExt.ndkVersion
+                if (ndkVersionValue == null) {
+                    throw new GradleException(
+                        "Please set 'android.ndkVersion' in '${hostProject.path}/build.gradle'."
+                    )
                 }
 
-                def task = project.tasks.create(taskName, CargoKitBuildTask.class) {
+                // Handle both "android-34" and "34" styles for compileSdkVersion
+                def compileSdkStr = androidExt.compileSdkVersion?.toString()
+                if (compileSdkStr == null) {
+                    throw new GradleException(
+                        "android.compileSdkVersion must be set on host project (${hostProject.path})."
+                    )
+                }
+                int compileSdkInt
+                if (compileSdkStr.startsWith("android-")) {
+                    compileSdkInt = Integer.parseInt(compileSdkStr.substring("android-".length()))
+                } else {
+                    compileSdkInt = Integer.parseInt(compileSdkStr)
+                }
+
+                def minSdkInt = androidExt.defaultConfig.minSdkVersion.apiLevel as int
+
+                def task = project.tasks.create(taskName, CargoKitBuildTask) {
                     buildMode = variant.buildType.name
                     buildDir = cargoBuildDir
                     outputDir = cargoOutputDir
-                    ndkVersion = plugin.project.android.ndkVersion
-                    sdkDirectory = plugin.project.android.sdkDirectory
-                    minSdkVersion = plugin.project.android.defaultConfig.minSdkVersion.apiLevel as int
-                    compileSdkVersion = plugin.project.android.compileSdkVersion.substring(8) as int
+                    ndkVersion = ndkVersionValue
+                    sdkDirectory = androidExt.sdkDirectory
+                    minSdkVersion = minSdkInt
+                    compileSdkVersion = compileSdkInt
                     targetPlatforms = platforms
                     pluginFile = CargoKitPlugin.file
                 }
+
                 def onTask = { newTask ->
                     if (newTask.name == "merge${buildType.capitalize()}NativeLibs") {
                         newTask.dependsOn task
-                        // Fix gradle 7.4.2 not picking up JNI library changes
+                        // Fix Gradle 7.4.2+ not picking up JNI library changes
                         newTask.outputs.upToDateWhen { false }
                     }
                 }
