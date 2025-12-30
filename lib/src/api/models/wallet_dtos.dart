@@ -10,7 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'wallet_dtos.freezed.dart';
 
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `MultisigDartPayload`, `ParticipantDartPayload`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
 
 // Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IntegratedAddress>>
 abstract class IntegratedAddress implements RustOpaqueInterface {
@@ -79,7 +79,7 @@ sealed class XelisAssetMetadata with _$XelisAssetMetadata {
     required String name,
     required String ticker,
     required int decimals,
-    required BigInt maxSupply,
+    required XelisMaxSupplyMode maxSupply,
     XelisAssetOwner? owner,
   }) = _XelisAssetMetadata;
 }
@@ -98,4 +98,17 @@ sealed class XelisAssetOwner with _$XelisAssetOwner {
     required BigInt originId,
     required String owner,
   }) = XelisAssetOwner_Owner;
+}
+
+@freezed
+sealed class XelisMaxSupplyMode with _$XelisMaxSupplyMode {
+  const XelisMaxSupplyMode._();
+
+  const factory XelisMaxSupplyMode.none() = XelisMaxSupplyMode_None;
+  const factory XelisMaxSupplyMode.fixed(
+    BigInt field0,
+  ) = XelisMaxSupplyMode_Fixed;
+  const factory XelisMaxSupplyMode.mintable(
+    BigInt field0,
+  ) = XelisMaxSupplyMode_Mintable;
 }

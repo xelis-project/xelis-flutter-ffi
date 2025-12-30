@@ -1238,7 +1238,7 @@ mixin _$XelisAssetMetadata {
   String get name;
   String get ticker;
   int get decimals;
-  BigInt get maxSupply;
+  XelisMaxSupplyMode get maxSupply;
   XelisAssetOwner? get owner;
 
   /// Create a copy of XelisAssetMetadata
@@ -1283,9 +1283,10 @@ abstract mixin class $XelisAssetMetadataCopyWith<$Res> {
       {String name,
       String ticker,
       int decimals,
-      BigInt maxSupply,
+      XelisMaxSupplyMode maxSupply,
       XelisAssetOwner? owner});
 
+  $XelisMaxSupplyModeCopyWith<$Res> get maxSupply;
   $XelisAssetOwnerCopyWith<$Res>? get owner;
 }
 
@@ -1324,12 +1325,22 @@ class _$XelisAssetMetadataCopyWithImpl<$Res>
       maxSupply: null == maxSupply
           ? _self.maxSupply
           : maxSupply // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as XelisMaxSupplyMode,
       owner: freezed == owner
           ? _self.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as XelisAssetOwner?,
     ));
+  }
+
+  /// Create a copy of XelisAssetMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $XelisMaxSupplyModeCopyWith<$Res> get maxSupply {
+    return $XelisMaxSupplyModeCopyWith<$Res>(_self.maxSupply, (value) {
+      return _then(_self.copyWith(maxSupply: value));
+    });
   }
 
   /// Create a copy of XelisAssetMetadata
@@ -1438,8 +1449,8 @@ extension XelisAssetMetadataPatterns on XelisAssetMetadata {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String name, String ticker, int decimals, BigInt maxSupply,
-            XelisAssetOwner? owner)?
+    TResult Function(String name, String ticker, int decimals,
+            XelisMaxSupplyMode maxSupply, XelisAssetOwner? owner)?
         $default, {
     required TResult orElse(),
   }) {
@@ -1468,8 +1479,8 @@ extension XelisAssetMetadataPatterns on XelisAssetMetadata {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String name, String ticker, int decimals, BigInt maxSupply,
-            XelisAssetOwner? owner)
+    TResult Function(String name, String ticker, int decimals,
+            XelisMaxSupplyMode maxSupply, XelisAssetOwner? owner)
         $default,
   ) {
     final _that = this;
@@ -1495,7 +1506,7 @@ extension XelisAssetMetadataPatterns on XelisAssetMetadata {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(String name, String ticker, int decimals,
-            BigInt maxSupply, XelisAssetOwner? owner)?
+            XelisMaxSupplyMode maxSupply, XelisAssetOwner? owner)?
         $default,
   ) {
     final _that = this;
@@ -1526,7 +1537,7 @@ class _XelisAssetMetadata implements XelisAssetMetadata {
   @override
   final int decimals;
   @override
-  final BigInt maxSupply;
+  final XelisMaxSupplyMode maxSupply;
   @override
   final XelisAssetOwner? owner;
 
@@ -1574,9 +1585,11 @@ abstract mixin class _$XelisAssetMetadataCopyWith<$Res>
       {String name,
       String ticker,
       int decimals,
-      BigInt maxSupply,
+      XelisMaxSupplyMode maxSupply,
       XelisAssetOwner? owner});
 
+  @override
+  $XelisMaxSupplyModeCopyWith<$Res> get maxSupply;
   @override
   $XelisAssetOwnerCopyWith<$Res>? get owner;
 }
@@ -1616,12 +1629,22 @@ class __$XelisAssetMetadataCopyWithImpl<$Res>
       maxSupply: null == maxSupply
           ? _self.maxSupply
           : maxSupply // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as XelisMaxSupplyMode,
       owner: freezed == owner
           ? _self.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as XelisAssetOwner?,
     ));
+  }
+
+  /// Create a copy of XelisAssetMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $XelisMaxSupplyModeCopyWith<$Res> get maxSupply {
+    return $XelisMaxSupplyModeCopyWith<$Res>(_self.maxSupply, (value) {
+      return _then(_self.copyWith(maxSupply: value));
+    });
   }
 
   /// Create a copy of XelisAssetMetadata
@@ -2024,6 +2047,369 @@ class _$XelisAssetOwner_OwnerCopyWithImpl<$Res>
           ? _self.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as String,
+    ));
+  }
+}
+
+/// @nodoc
+mixin _$XelisMaxSupplyMode {
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is XelisMaxSupplyMode);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'XelisMaxSupplyMode()';
+  }
+}
+
+/// @nodoc
+class $XelisMaxSupplyModeCopyWith<$Res> {
+  $XelisMaxSupplyModeCopyWith(
+      XelisMaxSupplyMode _, $Res Function(XelisMaxSupplyMode) __);
+}
+
+/// Adds pattern-matching-related methods to [XelisMaxSupplyMode].
+extension XelisMaxSupplyModePatterns on XelisMaxSupplyMode {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(XelisMaxSupplyMode_None value)? none,
+    TResult Function(XelisMaxSupplyMode_Fixed value)? fixed,
+    TResult Function(XelisMaxSupplyMode_Mintable value)? mintable,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case XelisMaxSupplyMode_None() when none != null:
+        return none(_that);
+      case XelisMaxSupplyMode_Fixed() when fixed != null:
+        return fixed(_that);
+      case XelisMaxSupplyMode_Mintable() when mintable != null:
+        return mintable(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(XelisMaxSupplyMode_None value) none,
+    required TResult Function(XelisMaxSupplyMode_Fixed value) fixed,
+    required TResult Function(XelisMaxSupplyMode_Mintable value) mintable,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case XelisMaxSupplyMode_None():
+        return none(_that);
+      case XelisMaxSupplyMode_Fixed():
+        return fixed(_that);
+      case XelisMaxSupplyMode_Mintable():
+        return mintable(_that);
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(XelisMaxSupplyMode_None value)? none,
+    TResult? Function(XelisMaxSupplyMode_Fixed value)? fixed,
+    TResult? Function(XelisMaxSupplyMode_Mintable value)? mintable,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case XelisMaxSupplyMode_None() when none != null:
+        return none(_that);
+      case XelisMaxSupplyMode_Fixed() when fixed != null:
+        return fixed(_that);
+      case XelisMaxSupplyMode_Mintable() when mintable != null:
+        return mintable(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? none,
+    TResult Function(BigInt field0)? fixed,
+    TResult Function(BigInt field0)? mintable,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case XelisMaxSupplyMode_None() when none != null:
+        return none();
+      case XelisMaxSupplyMode_Fixed() when fixed != null:
+        return fixed(_that.field0);
+      case XelisMaxSupplyMode_Mintable() when mintable != null:
+        return mintable(_that.field0);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() none,
+    required TResult Function(BigInt field0) fixed,
+    required TResult Function(BigInt field0) mintable,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case XelisMaxSupplyMode_None():
+        return none();
+      case XelisMaxSupplyMode_Fixed():
+        return fixed(_that.field0);
+      case XelisMaxSupplyMode_Mintable():
+        return mintable(_that.field0);
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? none,
+    TResult? Function(BigInt field0)? fixed,
+    TResult? Function(BigInt field0)? mintable,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case XelisMaxSupplyMode_None() when none != null:
+        return none();
+      case XelisMaxSupplyMode_Fixed() when fixed != null:
+        return fixed(_that.field0);
+      case XelisMaxSupplyMode_Mintable() when mintable != null:
+        return mintable(_that.field0);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class XelisMaxSupplyMode_None extends XelisMaxSupplyMode {
+  const XelisMaxSupplyMode_None() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is XelisMaxSupplyMode_None);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'XelisMaxSupplyMode.none()';
+  }
+}
+
+/// @nodoc
+
+class XelisMaxSupplyMode_Fixed extends XelisMaxSupplyMode {
+  const XelisMaxSupplyMode_Fixed(this.field0) : super._();
+
+  final BigInt field0;
+
+  /// Create a copy of XelisMaxSupplyMode
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $XelisMaxSupplyMode_FixedCopyWith<XelisMaxSupplyMode_Fixed> get copyWith =>
+      _$XelisMaxSupplyMode_FixedCopyWithImpl<XelisMaxSupplyMode_Fixed>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is XelisMaxSupplyMode_Fixed &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  @override
+  String toString() {
+    return 'XelisMaxSupplyMode.fixed(field0: $field0)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $XelisMaxSupplyMode_FixedCopyWith<$Res>
+    implements $XelisMaxSupplyModeCopyWith<$Res> {
+  factory $XelisMaxSupplyMode_FixedCopyWith(XelisMaxSupplyMode_Fixed value,
+          $Res Function(XelisMaxSupplyMode_Fixed) _then) =
+      _$XelisMaxSupplyMode_FixedCopyWithImpl;
+  @useResult
+  $Res call({BigInt field0});
+}
+
+/// @nodoc
+class _$XelisMaxSupplyMode_FixedCopyWithImpl<$Res>
+    implements $XelisMaxSupplyMode_FixedCopyWith<$Res> {
+  _$XelisMaxSupplyMode_FixedCopyWithImpl(this._self, this._then);
+
+  final XelisMaxSupplyMode_Fixed _self;
+  final $Res Function(XelisMaxSupplyMode_Fixed) _then;
+
+  /// Create a copy of XelisMaxSupplyMode
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(XelisMaxSupplyMode_Fixed(
+      null == field0
+          ? _self.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+    ));
+  }
+}
+
+/// @nodoc
+
+class XelisMaxSupplyMode_Mintable extends XelisMaxSupplyMode {
+  const XelisMaxSupplyMode_Mintable(this.field0) : super._();
+
+  final BigInt field0;
+
+  /// Create a copy of XelisMaxSupplyMode
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $XelisMaxSupplyMode_MintableCopyWith<XelisMaxSupplyMode_Mintable>
+      get copyWith => _$XelisMaxSupplyMode_MintableCopyWithImpl<
+          XelisMaxSupplyMode_Mintable>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is XelisMaxSupplyMode_Mintable &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  @override
+  String toString() {
+    return 'XelisMaxSupplyMode.mintable(field0: $field0)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $XelisMaxSupplyMode_MintableCopyWith<$Res>
+    implements $XelisMaxSupplyModeCopyWith<$Res> {
+  factory $XelisMaxSupplyMode_MintableCopyWith(
+          XelisMaxSupplyMode_Mintable value,
+          $Res Function(XelisMaxSupplyMode_Mintable) _then) =
+      _$XelisMaxSupplyMode_MintableCopyWithImpl;
+  @useResult
+  $Res call({BigInt field0});
+}
+
+/// @nodoc
+class _$XelisMaxSupplyMode_MintableCopyWithImpl<$Res>
+    implements $XelisMaxSupplyMode_MintableCopyWith<$Res> {
+  _$XelisMaxSupplyMode_MintableCopyWithImpl(this._self, this._then);
+
+  final XelisMaxSupplyMode_Mintable _self;
+  final $Res Function(XelisMaxSupplyMode_Mintable) _then;
+
+  /// Create a copy of XelisMaxSupplyMode
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(XelisMaxSupplyMode_Mintable(
+      null == field0
+          ? _self.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as BigInt,
     ));
   }
 }

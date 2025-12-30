@@ -11,39 +11,15 @@ part 'xswd_dtos.freezed.dart';
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
 // These functions are ignored (category: IgnoreBecauseExplicitAttribute): `new`
 
-class AppInfo {
-  final String id;
-  final String name;
-  final String description;
-  final String? url;
-  final Map<String, PermissionPolicy> permissions;
-
-  const AppInfo({
-    required this.id,
-    required this.name,
-    required this.description,
-    this.url,
-    required this.permissions,
-  });
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      name.hashCode ^
-      description.hashCode ^
-      url.hashCode ^
-      permissions.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppInfo &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          description == other.description &&
-          url == other.url &&
-          permissions == other.permissions;
+@freezed
+sealed class AppInfo with _$AppInfo {
+  const factory AppInfo({
+    required String id,
+    required String name,
+    required String description,
+    String? url,
+    required Map<String, PermissionPolicy> permissions,
+  }) = _AppInfo;
 }
 
 enum PermissionPolicy {
@@ -61,15 +37,13 @@ enum UserPermissionDecision {
   ;
 }
 
-class XswdRequestSummary {
-  final XswdRequestType eventType;
-  final AppInfo applicationInfo;
-
-  const XswdRequestSummary({
-    required this.eventType,
-    required this.applicationInfo,
-  });
-
+@freezed
+sealed class XswdRequestSummary with _$XswdRequestSummary {
+  const XswdRequestSummary._();
+  const factory XswdRequestSummary({
+    required XswdRequestType eventType,
+    required AppInfo applicationInfo,
+  }) = _XswdRequestSummary;
   bool isAppDisconnect() => RustLib.instance.api
           .crateApiModelsXswdDtosXswdRequestSummaryIsAppDisconnect(
         that: this,
@@ -90,16 +64,20 @@ class XswdRequestSummary {
         that: this,
       );
 
-  @override
-  int get hashCode => eventType.hashCode ^ applicationInfo.hashCode;
+  bool isPrefetchPermissionsRequest() => RustLib.instance.api
+          .crateApiModelsXswdDtosXswdRequestSummaryIsPrefetchPermissionsRequest(
+        that: this,
+      );
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is XswdRequestSummary &&
-          runtimeType == other.runtimeType &&
-          eventType == other.eventType &&
-          applicationInfo == other.applicationInfo;
+  String? permissionJson() => RustLib.instance.api
+          .crateApiModelsXswdDtosXswdRequestSummaryPermissionJson(
+        that: this,
+      );
+
+  String? prefetchPermissionsJson() => RustLib.instance.api
+          .crateApiModelsXswdDtosXswdRequestSummaryPrefetchPermissionsJson(
+        that: this,
+      );
 }
 
 @freezed
@@ -110,6 +88,9 @@ sealed class XswdRequestType with _$XswdRequestType {
   const factory XswdRequestType.permission(
     String field0,
   ) = XswdRequestType_Permission;
+  const factory XswdRequestType.prefetchPermissions(
+    String field0,
+  ) = XswdRequestType_PrefetchPermissions;
   const factory XswdRequestType.cancelRequest() = XswdRequestType_CancelRequest;
   const factory XswdRequestType.appDisconnect() = XswdRequestType_AppDisconnect;
 }

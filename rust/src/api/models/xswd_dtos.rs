@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use flutter_rust_bridge::frb;
 
 #[derive(Clone, Debug)]
+#[frb(dart_metadata=("freezed"))]
 pub struct XswdRequestSummary {
     pub event_type: XswdRequestType,
     pub application_info: AppInfo,
@@ -33,12 +34,34 @@ impl XswdRequestSummary {
     }
 
     #[frb(sync)]
+    pub fn is_prefetch_permissions_request(&self) -> bool {
+        matches!(self.event_type, XswdRequestType::PrefetchPermissions(_))
+    }
+
+    #[frb(sync)]
     pub fn is_app_disconnect(&self) -> bool {
         matches!(self.event_type, XswdRequestType::AppDisconnect)
+    }
+
+    #[frb(sync)]
+    pub fn permission_json(&self) -> Option<String> {
+        match &self.event_type {
+            XswdRequestType::Permission(json) => Some(json.clone()),
+            _ => None,
+        }
+    }
+
+    #[frb(sync)]
+    pub fn prefetch_permissions_json(&self) -> Option<String> {
+        match &self.event_type {
+            XswdRequestType::PrefetchPermissions(json) => Some(json.clone()),
+            _ => None,
+        }
     }
 }
 
 #[derive(Clone, Debug)]
+#[frb(dart_metadata=("freezed"))]
 pub struct AppInfo {
     pub id: String,
     pub name: String,
@@ -48,14 +71,17 @@ pub struct AppInfo {
 }
 
 #[derive(Clone, Debug)]
+#[frb(dart_metadata=("freezed"))]
 pub enum XswdRequestType {
     Application,
     Permission(String),
+    PrefetchPermissions(String),
     CancelRequest,
     AppDisconnect,
 }
 
 #[derive(Clone, Debug)]
+#[frb(dart_metadata=("freezed"))]
 pub enum PermissionPolicy {
     Ask,
     Accept,
@@ -63,6 +89,7 @@ pub enum PermissionPolicy {
 }
 
 #[derive(Clone, Debug)]
+#[frb(dart_metadata=("freezed"))]
 pub enum UserPermissionDecision {
     Accept,
     Reject,

@@ -418,7 +418,6 @@ impl XelisWallet {
 
     pub async fn close(&self) {
         let (start_time, thread_id) = ffi_entry!("close");
-        clear_asset_cache();
         self.wallet.close().await;
         ffi_exit!("close", start_time, thread_id);
     }

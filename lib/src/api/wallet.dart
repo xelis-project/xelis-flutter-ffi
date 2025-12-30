@@ -11,14 +11,9 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'precomputed_tables.dart';
 import 'xswd/imp.dart';
 
-// These functions are ignored because they are not marked as `pub`: `build_unsigned_transaction`, `convert_float_amount`, `create_transfers`, `get_asset_data`, `get_mt_params`, `init_asset_cache`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `from`
+// These functions are ignored because they are not marked as `pub`: `build_unsigned_transaction`, `convert_float_amount`, `create_transfers`, `get_asset_data`, `get_mt_params`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `from`, `from`
 // These functions are ignored (category: IgnoreBecauseExplicitAttribute): `get_wallet`
-
-void clearAssetCache() => RustLib.instance.api.crateApiWalletClearAssetCache();
-
-BigInt getAssetCacheSize() =>
-    RustLib.instance.api.crateApiWalletGetAssetCacheSize();
 
 PrecomputedTablesShared? getCachedTable() =>
     RustLib.instance.api.crateApiWalletGetCachedTable();
@@ -229,6 +224,8 @@ abstract class XelisWallet implements RustOpaqueInterface, XSWD {
           requestApplicationDartCallback,
       required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
           requestPermissionDartCallback,
+      required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
+          requestPrefetchPermissionsDartCallback,
       required FutureOr<void> Function(XswdRequestSummary)
           appDisconnectDartCallback});
 

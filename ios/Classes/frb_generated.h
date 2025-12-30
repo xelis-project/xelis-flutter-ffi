@@ -127,8 +127,13 @@ typedef struct wire_cst_XswdRequestType_Permission {
   struct wire_cst_list_prim_u_8_strict *field0;
 } wire_cst_XswdRequestType_Permission;
 
+typedef struct wire_cst_XswdRequestType_PrefetchPermissions {
+  struct wire_cst_list_prim_u_8_strict *field0;
+} wire_cst_XswdRequestType_PrefetchPermissions;
+
 typedef union XswdRequestTypeKind {
   struct wire_cst_XswdRequestType_Permission Permission;
+  struct wire_cst_XswdRequestType_PrefetchPermissions PrefetchPermissions;
 } XswdRequestTypeKind;
 
 typedef struct wire_cst_xswd_request_type {
@@ -200,11 +205,29 @@ typedef struct wire_cst_list_record_string_u_64 {
   int32_t len;
 } wire_cst_list_record_string_u_64;
 
+typedef struct wire_cst_XelisMaxSupplyMode_Fixed {
+  uint64_t field0;
+} wire_cst_XelisMaxSupplyMode_Fixed;
+
+typedef struct wire_cst_XelisMaxSupplyMode_Mintable {
+  uint64_t field0;
+} wire_cst_XelisMaxSupplyMode_Mintable;
+
+typedef union XelisMaxSupplyModeKind {
+  struct wire_cst_XelisMaxSupplyMode_Fixed Fixed;
+  struct wire_cst_XelisMaxSupplyMode_Mintable Mintable;
+} XelisMaxSupplyModeKind;
+
+typedef struct wire_cst_xelis_max_supply_mode {
+  int32_t tag;
+  union XelisMaxSupplyModeKind kind;
+} wire_cst_xelis_max_supply_mode;
+
 typedef struct wire_cst_xelis_asset_metadata {
   struct wire_cst_list_prim_u_8_strict *name;
   struct wire_cst_list_prim_u_8_strict *ticker;
   uint8_t decimals;
-  uint64_t max_supply;
+  struct wire_cst_xelis_max_supply_mode max_supply;
   struct wire_cst_xelis_asset_owner *owner;
 } wire_cst_xelis_asset_metadata;
 
@@ -480,6 +503,7 @@ void frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_start_xswd(int64
                                                                            const void *cancel_request_dart_callback,
                                                                            const void *request_application_dart_callback,
                                                                            const void *request_permission_dart_callback,
+                                                                           const void *request_prefetch_permissions_dart_callback,
                                                                            const void *app_disconnect_dart_callback);
 
 void frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_stop_xswd(int64_t port_,
@@ -502,8 +526,6 @@ void frbgen_xelis_flutter_wire__crate__api__models__address_book_dtos__address_b
 void frbgen_xelis_flutter_wire__crate__api__precomputed_tables__are_precomputed_tables_available(int64_t port_,
                                                                                                  struct wire_cst_list_prim_u_8_strict *precomputed_tables_path,
                                                                                                  struct wire_cst_precomputed_table_type *precomputed_table_type);
-
-WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__clear_asset_cache(void);
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__clear_cached_tables(void);
 
@@ -534,8 +556,6 @@ void frbgen_xelis_flutter_wire__crate__api__utils__format_coin(int64_t port_,
 
 void frbgen_xelis_flutter_wire__crate__api__utils__format_xelis(int64_t port_, uint64_t value);
 
-WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__get_asset_cache_size(void);
-
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__get_cached_table(void);
 
 void frbgen_xelis_flutter_wire__crate__api__wallet__get_current_precomputed_tables_type(int64_t port_);
@@ -546,7 +566,12 @@ WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__get_mnemonic_
 
 void frbgen_xelis_flutter_wire__crate__api__logger__init_logger(int64_t port_);
 
-WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__is_address_valid(struct wire_cst_list_prim_u_8_strict *str_address);
+void frbgen_xelis_flutter_wire__crate__api__api__initialize_crypto_provider(int64_t port_);
+
+void frbgen_xelis_flutter_wire__crate__api__api__initialize_xelis_config(int64_t port_);
+
+WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__is_address_valid(struct wire_cst_list_prim_u_8_strict *str_address,
+                                                                                    int32_t network);
 
 void frbgen_xelis_flutter_wire__crate__api__wallet__open_xelis_wallet(int64_t port_,
                                                                       struct wire_cst_list_prim_u_8_strict *name,
@@ -572,7 +597,7 @@ WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__wallet__set_mt_param
 
 void frbgen_xelis_flutter_wire__crate__api__api__set_up_rust_logger(int64_t port_);
 
-WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address_json(struct wire_cst_list_prim_u_8_strict *integrated_address);
+WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address(struct wire_cst_list_prim_u_8_strict *integrated_address);
 
 void frbgen_xelis_flutter_wire__crate__api__wallet__update_tables(int64_t port_,
                                                                   struct wire_cst_list_prim_u_8_strict *precomputed_tables_path,
@@ -583,6 +608,7 @@ void frbgen_xelis_flutter_wire__crate__api__xswd__imp__xswd_handler(int64_t port
                                                                     const void *cancel_request_dart_callback,
                                                                     const void *request_application_dart_callback,
                                                                     const void *request_permission_dart_callback,
+                                                                    const void *request_prefetch_permissions_dart_callback,
                                                                     const void *app_disconnect_dart_callback);
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_app_disconnect(struct wire_cst_xswd_request_summary *that);
@@ -592,6 +618,12 @@ WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__x
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_cancel_request(struct wire_cst_xswd_request_summary *that);
 
 WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request(struct wire_cst_xswd_request_summary *that);
+
+WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(struct wire_cst_xswd_request_summary *that);
+
+WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(struct wire_cst_xswd_request_summary *that);
+
+WireSyncRust2DartDco frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(struct wire_cst_xswd_request_summary *that);
 
 void frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAddress(const void *ptr);
 
@@ -746,6 +778,8 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerXelisWallet);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__api__create_log_stream);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__api__create_progress_report_stream);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__api__initialize_crypto_provider);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__api__initialize_xelis_config);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__api__set_up_rust_logger);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__logger__SendToDartLogger_auto_accessor_get_level);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__logger__SendToDartLogger_auto_accessor_set_level);
@@ -766,6 +800,9 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_application_request);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_cancel_request);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__precomputed_tables__are_precomputed_tables_available);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_index);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__precomputed_tables__precomputed_table_type_name);
@@ -779,7 +816,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__utils__get_language_index_from_str);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__utils__get_mnemonic_words);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__utils__is_address_valid);
-    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_all_history);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_broadcast_transaction);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_change_password);
@@ -839,11 +876,9 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_stop_xswd);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_track_asset);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_untrack_asset);
-    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__clear_asset_cache);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__clear_cached_tables);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__create_xelis_wallet);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__drop_wallet);
-    dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__get_asset_cache_size);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__get_cached_table);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__get_current_precomputed_tables_type);
     dummy_var ^= ((int64_t) (void*) frbgen_xelis_flutter_wire__crate__api__wallet__open_xelis_wallet);

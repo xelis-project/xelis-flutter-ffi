@@ -8,6 +8,15 @@ import 'logger.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'progress_report.dart';
 
+/// Initialize xelis_common configuration
+/// This must be called before using any wallet functionality
+/// It initializes VM libraries and other global configuration
+Future<void> initializeXelisConfig() =>
+    RustLib.instance.api.crateApiApiInitializeXelisConfig();
+
+Future<void> initializeCryptoProvider() =>
+    RustLib.instance.api.crateApiApiInitializeCryptoProvider();
+
 Future<void> setUpRustLogger() =>
     RustLib.instance.api.crateApiApiSetUpRustLogger();
 

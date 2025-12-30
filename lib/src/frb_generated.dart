@@ -80,7 +80,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 2069668589;
+  int get rustContentHash => -747425718;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -330,6 +330,8 @@ abstract class RustLibApi extends BaseApi {
           requestApplicationDartCallback,
       required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
           requestPermissionDartCallback,
+      required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
+          requestPrefetchPermissionsDartCallback,
       required FutureOr<void> Function(XswdRequestSummary)
           appDisconnectDartCallback});
 
@@ -351,8 +353,6 @@ abstract class RustLibApi extends BaseApi {
   Future<bool> crateApiPrecomputedTablesArePrecomputedTablesAvailable(
       {required String precomputedTablesPath,
       required PrecomputedTableType precomputedTableType});
-
-  void crateApiWalletClearAssetCache();
 
   void crateApiWalletClearCachedTables();
 
@@ -379,8 +379,6 @@ abstract class RustLibApi extends BaseApi {
 
   Future<String> crateApiUtilsFormatXelis({required BigInt value});
 
-  BigInt crateApiWalletGetAssetCacheSize();
-
   PrecomputedTablesShared? crateApiWalletGetCachedTable();
 
   Future<PrecomputedTableType> crateApiWalletGetCurrentPrecomputedTablesType();
@@ -391,7 +389,12 @@ abstract class RustLibApi extends BaseApi {
 
   Future<void> crateApiLoggerInitLogger();
 
-  bool crateApiUtilsIsAddressValid({required String strAddress});
+  Future<void> crateApiApiInitializeCryptoProvider();
+
+  Future<void> crateApiApiInitializeXelisConfig();
+
+  bool crateApiUtilsIsAddressValid(
+      {required String strAddress, required Network network});
 
   Future<XelisWallet> crateApiWalletOpenXelisWallet(
       {required String name,
@@ -417,7 +420,7 @@ abstract class RustLibApi extends BaseApi {
 
   Future<void> crateApiApiSetUpRustLogger();
 
-  String crateApiUtilsSplitIntegratedAddressJson(
+  String crateApiUtilsSplitIntegratedAddress(
       {required String integratedAddress});
 
   Future<void> crateApiWalletUpdateTables(
@@ -432,6 +435,8 @@ abstract class RustLibApi extends BaseApi {
           requestApplicationDartCallback,
       required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
           requestPermissionDartCallback,
+      required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
+          requestPrefetchPermissionsDartCallback,
       required FutureOr<void> Function(XswdRequestSummary)
           appDisconnectDartCallback});
 
@@ -445,6 +450,15 @@ abstract class RustLibApi extends BaseApi {
       {required XswdRequestSummary that});
 
   bool crateApiModelsXswdDtosXswdRequestSummaryIsPermissionRequest(
+      {required XswdRequestSummary that});
+
+  bool crateApiModelsXswdDtosXswdRequestSummaryIsPrefetchPermissionsRequest(
+      {required XswdRequestSummary that});
+
+  String? crateApiModelsXswdDtosXswdRequestSummaryPermissionJson(
+      {required XswdRequestSummary that});
+
+  String? crateApiModelsXswdDtosXswdRequestSummaryPrefetchPermissionsJson(
       {required XswdRequestSummary that});
 
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Address;
@@ -2669,6 +2683,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           requestApplicationDartCallback,
       required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
           requestPermissionDartCallback,
+      required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
+          requestPrefetchPermissionsDartCallback,
       required FutureOr<void> Function(XswdRequestSummary)
           appDisconnectDartCallback}) {
     return handler.executeNormal(NormalTask(
@@ -2686,10 +2702,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             cst_encode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(
                 requestPermissionDartCallback);
         var arg4 =
+            cst_encode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(
+                requestPrefetchPermissionsDartCallback);
+        var arg5 =
             cst_encode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(
                 appDisconnectDartCallback);
         return wire.wire__crate__api__wallet__XelisWallet_start_xswd(
-            port_, arg0, arg1, arg2, arg3, arg4);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_unit,
@@ -2701,6 +2720,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         cancelRequestDartCallback,
         requestApplicationDartCallback,
         requestPermissionDartCallback,
+        requestPrefetchPermissionsDartCallback,
         appDisconnectDartCallback
       ],
       apiImpl: this,
@@ -2715,6 +2735,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           "cancelRequestDartCallback",
           "requestApplicationDartCallback",
           "requestPermissionDartCallback",
+          "requestPrefetchPermissionsDartCallback",
           "appDisconnectDartCallback"
         ],
       );
@@ -2885,28 +2906,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             debugName: "are_precomputed_tables_available",
             argNames: ["precomputedTablesPath", "precomputedTableType"],
           );
-
-  @override
-  void crateApiWalletClearAssetCache() {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        return wire.wire__crate__api__wallet__clear_asset_cache();
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiWalletClearAssetCacheConstMeta,
-      argValues: [],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiWalletClearAssetCacheConstMeta =>
-      const TaskConstMeta(
-        debugName: "clear_asset_cache",
-        argNames: [],
-      );
 
   @override
   void crateApiWalletClearCachedTables() {
@@ -3135,28 +3134,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  BigInt crateApiWalletGetAssetCacheSize() {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        return wire.wire__crate__api__wallet__get_asset_cache_size();
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_usize,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiWalletGetAssetCacheSizeConstMeta,
-      argValues: [],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiWalletGetAssetCacheSizeConstMeta =>
-      const TaskConstMeta(
-        debugName: "get_asset_cache_size",
-        argNames: [],
-      );
-
-  @override
   PrecomputedTablesShared? crateApiWalletGetCachedTable() {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -3271,18 +3248,64 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  bool crateApiUtilsIsAddressValid({required String strAddress}) {
+  Future<void> crateApiApiInitializeCryptoProvider() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        return wire.wire__crate__api__api__initialize_crypto_provider(port_);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiInitializeCryptoProviderConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiInitializeCryptoProviderConstMeta =>
+      const TaskConstMeta(
+        debugName: "initialize_crypto_provider",
+        argNames: [],
+      );
+
+  @override
+  Future<void> crateApiApiInitializeXelisConfig() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        return wire.wire__crate__api__api__initialize_xelis_config(port_);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiInitializeXelisConfigConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiInitializeXelisConfigConstMeta =>
+      const TaskConstMeta(
+        debugName: "initialize_xelis_config",
+        argNames: [],
+      );
+
+  @override
+  bool crateApiUtilsIsAddressValid(
+      {required String strAddress, required Network network}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         var arg0 = cst_encode_String(strAddress);
-        return wire.wire__crate__api__utils__is_address_valid(arg0);
+        var arg1 = cst_encode_network(network);
+        return wire.wire__crate__api__utils__is_address_valid(arg0, arg1);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_bool,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiUtilsIsAddressValidConstMeta,
-      argValues: [strAddress],
+      argValues: [strAddress, network],
       apiImpl: this,
     ));
   }
@@ -3290,7 +3313,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiUtilsIsAddressValidConstMeta =>
       const TaskConstMeta(
         debugName: "is_address_valid",
-        argNames: ["strAddress"],
+        argNames: ["strAddress", "network"],
       );
 
   @override
@@ -3494,27 +3517,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  String crateApiUtilsSplitIntegratedAddressJson(
+  String crateApiUtilsSplitIntegratedAddress(
       {required String integratedAddress}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         var arg0 = cst_encode_String(integratedAddress);
-        return wire
-            .wire__crate__api__utils__split_integrated_address_json(arg0);
+        return wire.wire__crate__api__utils__split_integrated_address(arg0);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_AnyhowException,
       ),
-      constMeta: kCrateApiUtilsSplitIntegratedAddressJsonConstMeta,
+      constMeta: kCrateApiUtilsSplitIntegratedAddressConstMeta,
       argValues: [integratedAddress],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiUtilsSplitIntegratedAddressJsonConstMeta =>
+  TaskConstMeta get kCrateApiUtilsSplitIntegratedAddressConstMeta =>
       const TaskConstMeta(
-        debugName: "split_integrated_address_json",
+        debugName: "split_integrated_address",
         argNames: ["integratedAddress"],
       );
 
@@ -3553,6 +3575,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           requestApplicationDartCallback,
       required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
           requestPermissionDartCallback,
+      required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
+          requestPrefetchPermissionsDartCallback,
       required FutureOr<void> Function(XswdRequestSummary)
           appDisconnectDartCallback}) {
     return handler.executeNormal(NormalTask(
@@ -3570,10 +3594,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             cst_encode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(
                 requestPermissionDartCallback);
         var arg4 =
+            cst_encode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(
+                requestPrefetchPermissionsDartCallback);
+        var arg5 =
             cst_encode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(
                 appDisconnectDartCallback);
         return wire.wire__crate__api__xswd__imp__xswd_handler(
-            port_, arg0, arg1, arg2, arg3, arg4);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_unit,
@@ -3585,6 +3612,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         cancelRequestDartCallback,
         requestApplicationDartCallback,
         requestPermissionDartCallback,
+        requestPrefetchPermissionsDartCallback,
         appDisconnectDartCallback
       ],
       apiImpl: this,
@@ -3598,6 +3626,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           "cancelRequestDartCallback",
           "requestApplicationDartCallback",
           "requestPermissionDartCallback",
+          "requestPrefetchPermissionsDartCallback",
           "appDisconnectDartCallback"
         ],
       );
@@ -3711,6 +3740,90 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       get kCrateApiModelsXswdDtosXswdRequestSummaryIsPermissionRequestConstMeta =>
           const TaskConstMeta(
             debugName: "xswd_request_summary_is_permission_request",
+            argNames: ["that"],
+          );
+
+  @override
+  bool crateApiModelsXswdDtosXswdRequestSummaryIsPrefetchPermissionsRequest(
+      {required XswdRequestSummary that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_box_autoadd_xswd_request_summary(that);
+        return wire
+            .wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+                arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_bool,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiModelsXswdDtosXswdRequestSummaryIsPrefetchPermissionsRequestConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiModelsXswdDtosXswdRequestSummaryIsPrefetchPermissionsRequestConstMeta =>
+          const TaskConstMeta(
+            debugName: "xswd_request_summary_is_prefetch_permissions_request",
+            argNames: ["that"],
+          );
+
+  @override
+  String? crateApiModelsXswdDtosXswdRequestSummaryPermissionJson(
+      {required XswdRequestSummary that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_box_autoadd_xswd_request_summary(that);
+        return wire
+            .wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+                arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_opt_String,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiModelsXswdDtosXswdRequestSummaryPermissionJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiModelsXswdDtosXswdRequestSummaryPermissionJsonConstMeta =>
+          const TaskConstMeta(
+            debugName: "xswd_request_summary_permission_json",
+            argNames: ["that"],
+          );
+
+  @override
+  String? crateApiModelsXswdDtosXswdRequestSummaryPrefetchPermissionsJson(
+      {required XswdRequestSummary that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_box_autoadd_xswd_request_summary(that);
+        return wire
+            .wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
+                arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_opt_String,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiModelsXswdDtosXswdRequestSummaryPrefetchPermissionsJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiModelsXswdDtosXswdRequestSummaryPrefetchPermissionsJsonConstMeta =>
+          const TaskConstMeta(
+            debugName: "xswd_request_summary_prefetch_permissions_json",
             argNames: ["that"],
           );
 
@@ -4788,7 +4901,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       name: dco_decode_String(arr[0]),
       ticker: dco_decode_String(arr[1]),
       decimals: dco_decode_u_8(arr[2]),
-      maxSupply: dco_decode_u_64(arr[3]),
+      maxSupply: dco_decode_xelis_max_supply_mode(arr[3]),
       owner: dco_decode_opt_box_autoadd_xelis_asset_owner(arr[4]),
     );
   }
@@ -4809,6 +4922,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           origin: dco_decode_String(raw[1]),
           originId: dco_decode_u_64(raw[2]),
           owner: dco_decode_String(raw[3]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  XelisMaxSupplyMode dco_decode_xelis_max_supply_mode(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return XelisMaxSupplyMode_None();
+      case 1:
+        return XelisMaxSupplyMode_Fixed(
+          dco_decode_u_64(raw[1]),
+        );
+      case 2:
+        return XelisMaxSupplyMode_Mintable(
+          dco_decode_u_64(raw[1]),
         );
       default:
         throw Exception("unreachable");
@@ -4838,8 +4970,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dco_decode_String(raw[1]),
         );
       case 2:
-        return XswdRequestType_CancelRequest();
+        return XswdRequestType_PrefetchPermissions(
+          dco_decode_String(raw[1]),
+        );
       case 3:
+        return XswdRequestType_CancelRequest();
+      case 4:
         return XswdRequestType_AppDisconnect();
       default:
         throw Exception("unreachable");
@@ -5825,7 +5961,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_name = sse_decode_String(deserializer);
     var var_ticker = sse_decode_String(deserializer);
     var var_decimals = sse_decode_u_8(deserializer);
-    var var_maxSupply = sse_decode_u_64(deserializer);
+    var var_maxSupply = sse_decode_xelis_max_supply_mode(deserializer);
     var var_owner = sse_decode_opt_box_autoadd_xelis_asset_owner(deserializer);
     return XelisAssetMetadata(
         name: var_name,
@@ -5859,6 +5995,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  XelisMaxSupplyMode sse_decode_xelis_max_supply_mode(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        return XelisMaxSupplyMode_None();
+      case 1:
+        var var_field0 = sse_decode_u_64(deserializer);
+        return XelisMaxSupplyMode_Fixed(var_field0);
+      case 2:
+        var var_field0 = sse_decode_u_64(deserializer);
+        return XelisMaxSupplyMode_Mintable(var_field0);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
   XswdRequestSummary sse_decode_xswd_request_summary(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -5880,8 +6036,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         var var_field0 = sse_decode_String(deserializer);
         return XswdRequestType_Permission(var_field0);
       case 2:
-        return XswdRequestType_CancelRequest();
+        var var_field0 = sse_decode_String(deserializer);
+        return XswdRequestType_PrefetchPermissions(var_field0);
       case 3:
+        return XswdRequestType_CancelRequest();
+      case 4:
         return XswdRequestType_AppDisconnect();
       default:
         throw UnimplementedError('');
@@ -7235,7 +7394,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.name, serializer);
     sse_encode_String(self.ticker, serializer);
     sse_encode_u_8(self.decimals, serializer);
-    sse_encode_u_64(self.maxSupply, serializer);
+    sse_encode_xelis_max_supply_mode(self.maxSupply, serializer);
     sse_encode_opt_box_autoadd_xelis_asset_owner(self.owner, serializer);
   }
 
@@ -7263,6 +7422,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_xelis_max_supply_mode(
+      XelisMaxSupplyMode self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case XelisMaxSupplyMode_None():
+        sse_encode_i_32(0, serializer);
+      case XelisMaxSupplyMode_Fixed(field0: final field0):
+        sse_encode_i_32(1, serializer);
+        sse_encode_u_64(field0, serializer);
+      case XelisMaxSupplyMode_Mintable(field0: final field0):
+        sse_encode_i_32(2, serializer);
+        sse_encode_u_64(field0, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_xswd_request_summary(
       XswdRequestSummary self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7280,10 +7455,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case XswdRequestType_Permission(field0: final field0):
         sse_encode_i_32(1, serializer);
         sse_encode_String(field0, serializer);
-      case XswdRequestType_CancelRequest():
+      case XswdRequestType_PrefetchPermissions(field0: final field0):
         sse_encode_i_32(2, serializer);
-      case XswdRequestType_AppDisconnect():
+        sse_encode_String(field0, serializer);
+      case XswdRequestType_CancelRequest():
         sse_encode_i_32(3, serializer);
+      case XswdRequestType_AppDisconnect():
+        sse_encode_i_32(4, serializer);
     }
   }
 }
@@ -7916,6 +8094,8 @@ class XelisWalletImpl extends RustOpaque implements XelisWallet {
               requestApplicationDartCallback,
           required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
               requestPermissionDartCallback,
+          required FutureOr<UserPermissionDecision> Function(XswdRequestSummary)
+              requestPrefetchPermissionsDartCallback,
           required FutureOr<void> Function(XswdRequestSummary)
               appDisconnectDartCallback}) =>
       RustLib.instance.api.crateApiWalletXelisWalletStartXswd(
@@ -7923,6 +8103,8 @@ class XelisWalletImpl extends RustOpaque implements XelisWallet {
           cancelRequestDartCallback: cancelRequestDartCallback,
           requestApplicationDartCallback: requestApplicationDartCallback,
           requestPermissionDartCallback: requestPermissionDartCallback,
+          requestPrefetchPermissionsDartCallback:
+              requestPrefetchPermissionsDartCallback,
           appDisconnectDartCallback: appDisconnectDartCallback);
 
   Future<void> stopXswd() =>

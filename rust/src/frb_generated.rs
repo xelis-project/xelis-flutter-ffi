@@ -44,7 +44,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 2069668589;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -747425718;
 
 // Section: executor
 
@@ -3217,9 +3217,10 @@ fn wire__crate__api__wallet__XelisWallet_start_xswd_impl(
     cancel_request_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
     request_application_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
     request_permission_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
+    request_prefetch_permissions_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
     app_disconnect_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec,_,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "XelisWallet_start_xswd", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { let api_that = that.cst_decode();let api_cancel_request_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(cancel_request_dart_callback.cst_decode());let api_request_application_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_application_dart_callback.cst_decode());let api_request_permission_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_permission_dart_callback.cst_decode());let api_app_disconnect_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(app_disconnect_dart_callback.cst_decode()); move |context| async move {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec,_,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "XelisWallet_start_xswd", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { let api_that = that.cst_decode();let api_cancel_request_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(cancel_request_dart_callback.cst_decode());let api_request_application_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_application_dart_callback.cst_decode());let api_request_permission_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_permission_dart_callback.cst_decode());let api_request_prefetch_permissions_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_prefetch_permissions_dart_callback.cst_decode());let api_app_disconnect_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(app_disconnect_dart_callback.cst_decode()); move |context| async move {
                     transform_result_dco::<_, _, flutter_rust_bridge::for_generated::anyhow::Error>((move || async move {
                         let mut api_that_guard = None;
 let decode_indices_ = flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(&api_that, 0, false)]);
@@ -3230,7 +3231,7 @@ let decode_indices_ = flutter_rust_bridge::for_generated::lockable_compute_decod
             }
         }
         let api_that_guard = api_that_guard.unwrap();
- let output_ok = crate::api::wallet::XelisWallet::start_xswd(&*api_that_guard, api_cancel_request_dart_callback, api_request_application_dart_callback, api_request_permission_dart_callback, api_app_disconnect_dart_callback).await?;   Ok(output_ok)
+ let output_ok = crate::api::wallet::XelisWallet::start_xswd(&*api_that_guard, api_cancel_request_dart_callback, api_request_application_dart_callback, api_request_permission_dart_callback, api_request_prefetch_permissions_dart_callback, api_app_disconnect_dart_callback).await?;   Ok(output_ok)
                     })().await)
                 } })
 }
@@ -3453,24 +3454,6 @@ fn wire__crate__api__precomputed_tables__are_precomputed_tables_available_impl(
                     .await,
                 )
             }
-        },
-    )
-}
-fn wire__crate__api__wallet__clear_asset_cache_impl(
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "clear_asset_cache",
-            port: None,
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-        },
-        move || {
-            transform_result_dco::<_, _, ()>((move || {
-                let output_ok = Result::<_, ()>::Ok({
-                    crate::api::wallet::clear_asset_cache();
-                })?;
-                Ok(output_ok)
-            })())
         },
     )
 }
@@ -3707,22 +3690,6 @@ fn wire__crate__api__utils__format_xelis_impl(
         },
     )
 }
-fn wire__crate__api__wallet__get_asset_cache_size_impl(
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "get_asset_cache_size",
-            port: None,
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-        },
-        move || {
-            transform_result_dco::<_, _, ()>((move || {
-                let output_ok = Result::<_, ()>::Ok(crate::api::wallet::get_asset_cache_size())?;
-                Ok(output_ok)
-            })())
-        },
-    )
-}
 fn wire__crate__api__wallet__get_cached_table_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
@@ -3820,8 +3787,51 @@ fn wire__crate__api__logger__init_logger_impl(
         },
     )
 }
+fn wire__crate__api__api__initialize_crypto_provider_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "initialize_crypto_provider",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            move |context| {
+                transform_result_dco::<_, _, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok = crate::api::api::initialize_crypto_provider()?;
+                        Ok(output_ok)
+                    })(),
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__api__initialize_xelis_config_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "initialize_xelis_config",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            move |context| {
+                transform_result_dco::<_, _, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok = crate::api::api::initialize_xelis_config()?;
+                        Ok(output_ok)
+                    })(),
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__utils__is_address_valid_impl(
     str_address: impl CstDecode<String>,
+    network: impl CstDecode<crate::api::network::Network>,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -3831,9 +3841,12 @@ fn wire__crate__api__utils__is_address_valid_impl(
         },
         move || {
             let api_str_address = str_address.cst_decode();
+            let api_network = network.cst_decode();
             transform_result_dco::<_, _, ()>((move || {
-                let output_ok =
-                    Result::<_, ()>::Ok(crate::api::utils::is_address_valid(api_str_address))?;
+                let output_ok = Result::<_, ()>::Ok(crate::api::utils::is_address_valid(
+                    api_str_address,
+                    api_network,
+                ))?;
                 Ok(output_ok)
             })())
         },
@@ -4014,12 +4027,12 @@ fn wire__crate__api__api__set_up_rust_logger_impl(
         },
     )
 }
-fn wire__crate__api__utils__split_integrated_address_json_impl(
+fn wire__crate__api__utils__split_integrated_address_impl(
     integrated_address: impl CstDecode<String>,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "split_integrated_address_json",
+            debug_name: "split_integrated_address",
             port: None,
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
         },
@@ -4028,7 +4041,7 @@ fn wire__crate__api__utils__split_integrated_address_json_impl(
             transform_result_dco::<_, _, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
                     let output_ok =
-                        crate::api::utils::split_integrated_address_json(api_integrated_address)?;
+                        crate::api::utils::split_integrated_address(api_integrated_address)?;
                     Ok(output_ok)
                 })(),
             )
@@ -4071,11 +4084,12 @@ fn wire__crate__api__xswd__imp__xswd_handler_impl(
     cancel_request_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
     request_application_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
     request_permission_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
+    request_prefetch_permissions_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
     app_disconnect_dart_callback: impl CstDecode<flutter_rust_bridge::DartOpaque>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec,_,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "xswd_handler", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { let api_receiver = receiver.cst_decode();let api_cancel_request_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(cancel_request_dart_callback.cst_decode());let api_request_application_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_application_dart_callback.cst_decode());let api_request_permission_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_permission_dart_callback.cst_decode());let api_app_disconnect_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(app_disconnect_dart_callback.cst_decode()); move |context| async move {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec,_,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "xswd_handler", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { let api_receiver = receiver.cst_decode();let api_cancel_request_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(cancel_request_dart_callback.cst_decode());let api_request_application_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_application_dart_callback.cst_decode());let api_request_permission_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_permission_dart_callback.cst_decode());let api_request_prefetch_permissions_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_user_permission_decision_AnyhowException(request_prefetch_permissions_dart_callback.cst_decode());let api_app_disconnect_dart_callback = decode_DartFn_Inputs_xswd_request_summary_Output_unit_AnyhowException(app_disconnect_dart_callback.cst_decode()); move |context| async move {
                     transform_result_dco::<_, _, ()>((move || async move {
-                         let output_ok = Result::<_,()>::Ok({ crate::api::xswd::imp::xswd_handler(api_receiver, api_cancel_request_dart_callback, api_request_application_dart_callback, api_request_permission_dart_callback, api_app_disconnect_dart_callback).await; })?;   Ok(output_ok)
+                         let output_ok = Result::<_,()>::Ok({ crate::api::xswd::imp::xswd_handler(api_receiver, api_cancel_request_dart_callback, api_request_application_dart_callback, api_request_permission_dart_callback, api_request_prefetch_permissions_dart_callback, api_app_disconnect_dart_callback).await; })?;   Ok(output_ok)
                     })().await)
                 } })
 }
@@ -4155,6 +4169,56 @@ fn wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_reque
             transform_result_dco::<_, _, ()>((move || {
                 let output_ok = Result::<_, ()>::Ok(
                     crate::api::models::xswd_dtos::XswdRequestSummary::is_permission_request(
+                        &api_that,
+                    ),
+                )?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request_impl(
+    that: impl CstDecode<crate::api::models::xswd_dtos::XswdRequestSummary>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "xswd_request_summary_is_prefetch_permissions_request", port: None, mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync }, move || { let api_that = that.cst_decode();
+                transform_result_dco::<_, _, ()>((move || {
+                     let output_ok = Result::<_,()>::Ok(crate::api::models::xswd_dtos::XswdRequestSummary::is_prefetch_permissions_request(&api_that))?;   Ok(output_ok)
+                })()) })
+}
+fn wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json_impl(
+    that: impl CstDecode<crate::api::models::xswd_dtos::XswdRequestSummary>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "xswd_request_summary_permission_json",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            transform_result_dco::<_, _, ()>((move || {
+                let output_ok = Result::<_, ()>::Ok(
+                    crate::api::models::xswd_dtos::XswdRequestSummary::permission_json(&api_that),
+                )?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json_impl(
+    that: impl CstDecode<crate::api::models::xswd_dtos::XswdRequestSummary>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "xswd_request_summary_prefetch_permissions_json",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            transform_result_dco::<_, _, ()>((move || {
+                let output_ok = Result::<_, ()>::Ok(
+                    crate::api::models::xswd_dtos::XswdRequestSummary::prefetch_permissions_json(
                         &api_that,
                     ),
                 )?;
@@ -4289,6 +4353,7 @@ impl CstDecode<crate::api::network::Network> for i32 {
         match self {
             0 => crate::api::network::Network::Mainnet,
             1 => crate::api::network::Network::Testnet,
+            2 => crate::api::network::Network::Stagenet,
             _ => unreachable!("Invalid variant for Network: {}", self),
         }
     }
@@ -5008,6 +5073,7 @@ impl SseDecode for crate::api::network::Network {
         return match inner {
             0 => crate::api::network::Network::Mainnet,
             1 => crate::api::network::Network::Testnet,
+            2 => crate::api::network::Network::Stagenet,
             _ => unreachable!("Invalid variant for Network: {}", inner),
         };
     }
@@ -5303,7 +5369,8 @@ impl SseDecode for crate::api::models::wallet_dtos::XelisAssetMetadata {
         let mut var_name = <String>::sse_decode(deserializer);
         let mut var_ticker = <String>::sse_decode(deserializer);
         let mut var_decimals = <u8>::sse_decode(deserializer);
-        let mut var_maxSupply = <u64>::sse_decode(deserializer);
+        let mut var_maxSupply =
+            <crate::api::models::wallet_dtos::XelisMaxSupplyMode>::sse_decode(deserializer);
         let mut var_owner =
             <Option<crate::api::models::wallet_dtos::XelisAssetOwner>>::sse_decode(deserializer);
         return crate::api::models::wallet_dtos::XelisAssetMetadata {
@@ -5349,6 +5416,29 @@ impl SseDecode for crate::api::models::wallet_dtos::XelisAssetOwner {
     }
 }
 
+impl SseDecode for crate::api::models::wallet_dtos::XelisMaxSupplyMode {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                return crate::api::models::wallet_dtos::XelisMaxSupplyMode::None;
+            }
+            1 => {
+                let mut var_field0 = <u64>::sse_decode(deserializer);
+                return crate::api::models::wallet_dtos::XelisMaxSupplyMode::Fixed(var_field0);
+            }
+            2 => {
+                let mut var_field0 = <u64>::sse_decode(deserializer);
+                return crate::api::models::wallet_dtos::XelisMaxSupplyMode::Mintable(var_field0);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseDecode for crate::api::models::xswd_dtos::XswdRequestSummary {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -5376,9 +5466,15 @@ impl SseDecode for crate::api::models::xswd_dtos::XswdRequestType {
                 return crate::api::models::xswd_dtos::XswdRequestType::Permission(var_field0);
             }
             2 => {
-                return crate::api::models::xswd_dtos::XswdRequestType::CancelRequest;
+                let mut var_field0 = <String>::sse_decode(deserializer);
+                return crate::api::models::xswd_dtos::XswdRequestType::PrefetchPermissions(
+                    var_field0,
+                );
             }
             3 => {
+                return crate::api::models::xswd_dtos::XswdRequestType::CancelRequest;
+            }
+            4 => {
                 return crate::api::models::xswd_dtos::XswdRequestType::AppDisconnect;
             }
             _ => {
@@ -5774,6 +5870,7 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::network::Network> 
         match self.0 {
             crate::api::network::Network::Mainnet => 0.into_dart(),
             crate::api::network::Network::Testnet => 1.into_dart(),
+            crate::api::network::Network::Stagenet => 2.into_dart(),
             _ => unreachable!(),
         }
     }
@@ -6011,6 +6108,36 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::models::wallet_dtos::XelisAss
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::models::wallet_dtos::XelisMaxSupplyMode {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::models::wallet_dtos::XelisMaxSupplyMode::None => {
+                [0.into_dart()].into_dart()
+            }
+            crate::api::models::wallet_dtos::XelisMaxSupplyMode::Fixed(field0) => {
+                [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::models::wallet_dtos::XelisMaxSupplyMode::Mintable(field0) => {
+                [2.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::models::wallet_dtos::XelisMaxSupplyMode
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::models::wallet_dtos::XelisMaxSupplyMode>
+    for crate::api::models::wallet_dtos::XelisMaxSupplyMode
+{
+    fn into_into_dart(self) -> crate::api::models::wallet_dtos::XelisMaxSupplyMode {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::models::xswd_dtos::XswdRequestSummary {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -6041,11 +6168,14 @@ impl flutter_rust_bridge::IntoDart for crate::api::models::xswd_dtos::XswdReques
             crate::api::models::xswd_dtos::XswdRequestType::Permission(field0) => {
                 [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
+            crate::api::models::xswd_dtos::XswdRequestType::PrefetchPermissions(field0) => {
+                [2.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
             crate::api::models::xswd_dtos::XswdRequestType::CancelRequest => {
-                [2.into_dart()].into_dart()
+                [3.into_dart()].into_dart()
             }
             crate::api::models::xswd_dtos::XswdRequestType::AppDisconnect => {
-                [3.into_dart()].into_dart()
+                [4.into_dart()].into_dart()
             }
             _ => {
                 unimplemented!("");
@@ -6654,6 +6784,7 @@ impl SseEncode for crate::api::network::Network {
             match self {
                 crate::api::network::Network::Mainnet => 0,
                 crate::api::network::Network::Testnet => 1,
+                crate::api::network::Network::Stagenet => 2,
                 _ => {
                     unimplemented!("");
                 }
@@ -6931,7 +7062,10 @@ impl SseEncode for crate::api::models::wallet_dtos::XelisAssetMetadata {
         <String>::sse_encode(self.name, serializer);
         <String>::sse_encode(self.ticker, serializer);
         <u8>::sse_encode(self.decimals, serializer);
-        <u64>::sse_encode(self.max_supply, serializer);
+        <crate::api::models::wallet_dtos::XelisMaxSupplyMode>::sse_encode(
+            self.max_supply,
+            serializer,
+        );
         <Option<crate::api::models::wallet_dtos::XelisAssetOwner>>::sse_encode(
             self.owner, serializer,
         );
@@ -6967,6 +7101,28 @@ impl SseEncode for crate::api::models::wallet_dtos::XelisAssetOwner {
     }
 }
 
+impl SseEncode for crate::api::models::wallet_dtos::XelisMaxSupplyMode {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::models::wallet_dtos::XelisMaxSupplyMode::None => {
+                <i32>::sse_encode(0, serializer);
+            }
+            crate::api::models::wallet_dtos::XelisMaxSupplyMode::Fixed(field0) => {
+                <i32>::sse_encode(1, serializer);
+                <u64>::sse_encode(field0, serializer);
+            }
+            crate::api::models::wallet_dtos::XelisMaxSupplyMode::Mintable(field0) => {
+                <i32>::sse_encode(2, serializer);
+                <u64>::sse_encode(field0, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseEncode for crate::api::models::xswd_dtos::XswdRequestSummary {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -6986,11 +7142,15 @@ impl SseEncode for crate::api::models::xswd_dtos::XswdRequestType {
                 <i32>::sse_encode(1, serializer);
                 <String>::sse_encode(field0, serializer);
             }
-            crate::api::models::xswd_dtos::XswdRequestType::CancelRequest => {
+            crate::api::models::xswd_dtos::XswdRequestType::PrefetchPermissions(field0) => {
                 <i32>::sse_encode(2, serializer);
+                <String>::sse_encode(field0, serializer);
+            }
+            crate::api::models::xswd_dtos::XswdRequestType::CancelRequest => {
+                <i32>::sse_encode(3, serializer);
             }
             crate::api::models::xswd_dtos::XswdRequestType::AppDisconnect => {
-                <i32>::sse_encode(3, serializer);
+                <i32>::sse_encode(4, serializer);
             }
             _ => {
                 unimplemented!("");
@@ -7918,6 +8078,29 @@ mod io {
             }
         }
     }
+    impl CstDecode<crate::api::models::wallet_dtos::XelisMaxSupplyMode>
+        for wire_cst_xelis_max_supply_mode
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::models::wallet_dtos::XelisMaxSupplyMode {
+            match self.tag {
+                0 => crate::api::models::wallet_dtos::XelisMaxSupplyMode::None,
+                1 => {
+                    let ans = unsafe { self.kind.Fixed };
+                    crate::api::models::wallet_dtos::XelisMaxSupplyMode::Fixed(
+                        ans.field0.cst_decode(),
+                    )
+                }
+                2 => {
+                    let ans = unsafe { self.kind.Mintable };
+                    crate::api::models::wallet_dtos::XelisMaxSupplyMode::Mintable(
+                        ans.field0.cst_decode(),
+                    )
+                }
+                _ => unreachable!(),
+            }
+        }
+    }
     impl CstDecode<crate::api::models::xswd_dtos::XswdRequestSummary>
         for wire_cst_xswd_request_summary
     {
@@ -7940,8 +8123,14 @@ mod io {
                         ans.field0.cst_decode(),
                     )
                 }
-                2 => crate::api::models::xswd_dtos::XswdRequestType::CancelRequest,
-                3 => crate::api::models::xswd_dtos::XswdRequestType::AppDisconnect,
+                2 => {
+                    let ans = unsafe { self.kind.PrefetchPermissions };
+                    crate::api::models::xswd_dtos::XswdRequestType::PrefetchPermissions(
+                        ans.field0.cst_decode(),
+                    )
+                }
+                3 => crate::api::models::xswd_dtos::XswdRequestType::CancelRequest,
+                4 => crate::api::models::xswd_dtos::XswdRequestType::AppDisconnect,
                 _ => unreachable!(),
             }
         }
@@ -8179,6 +8368,19 @@ field1: Default::default(), }
         }
     }
     impl Default for wire_cst_xelis_asset_owner {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_xelis_max_supply_mode {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                tag: -1,
+                kind: XelisMaxSupplyModeKind { nil__: () },
+            }
+        }
+    }
+    impl Default for wire_cst_xelis_max_supply_mode {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -8884,6 +9086,7 @@ field1: Default::default(), }
         cancel_request_dart_callback: *const std::ffi::c_void,
         request_application_dart_callback: *const std::ffi::c_void,
         request_permission_dart_callback: *const std::ffi::c_void,
+        request_prefetch_permissions_dart_callback: *const std::ffi::c_void,
         app_disconnect_dart_callback: *const std::ffi::c_void,
     ) {
         wire__crate__api__wallet__XelisWallet_start_xswd_impl(
@@ -8892,6 +9095,7 @@ field1: Default::default(), }
             cancel_request_dart_callback,
             request_application_dart_callback,
             request_permission_dart_callback,
+            request_prefetch_permissions_dart_callback,
             app_disconnect_dart_callback,
         )
     }
@@ -8951,12 +9155,6 @@ field1: Default::default(), }
             precomputed_tables_path,
             precomputed_table_type,
         )
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__wallet__clear_asset_cache(
-    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__wallet__clear_asset_cache_impl()
     }
 
     #[unsafe(no_mangle)]
@@ -9039,12 +9237,6 @@ field1: Default::default(), }
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__wallet__get_asset_cache_size(
-    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__wallet__get_asset_cache_size_impl()
-    }
-
-    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__wallet__get_cached_table(
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__wallet__get_cached_table_impl()
@@ -9077,10 +9269,25 @@ field1: Default::default(), }
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__api__initialize_crypto_provider(
+        port_: i64,
+    ) {
+        wire__crate__api__api__initialize_crypto_provider_impl(port_)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__api__initialize_xelis_config(
+        port_: i64,
+    ) {
+        wire__crate__api__api__initialize_xelis_config_impl(port_)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__utils__is_address_valid(
         str_address: *mut wire_cst_list_prim_u_8_strict,
+        network: i32,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__utils__is_address_valid_impl(str_address)
+        wire__crate__api__utils__is_address_valid_impl(str_address, network)
     }
 
     #[unsafe(no_mangle)]
@@ -9148,10 +9355,10 @@ field1: Default::default(), }
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address_json(
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address(
         integrated_address: *mut wire_cst_list_prim_u_8_strict,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__utils__split_integrated_address_json_impl(integrated_address)
+        wire__crate__api__utils__split_integrated_address_impl(integrated_address)
     }
 
     #[unsafe(no_mangle)]
@@ -9174,6 +9381,7 @@ field1: Default::default(), }
         cancel_request_dart_callback: *const std::ffi::c_void,
         request_application_dart_callback: *const std::ffi::c_void,
         request_permission_dart_callback: *const std::ffi::c_void,
+        request_prefetch_permissions_dart_callback: *const std::ffi::c_void,
         app_disconnect_dart_callback: *const std::ffi::c_void,
     ) {
         wire__crate__api__xswd__imp__xswd_handler_impl(
@@ -9182,6 +9390,7 @@ field1: Default::default(), }
             cancel_request_dart_callback,
             request_application_dart_callback,
             request_permission_dart_callback,
+            request_prefetch_permissions_dart_callback,
             app_disconnect_dart_callback,
         )
     }
@@ -9212,6 +9421,29 @@ field1: Default::default(), }
         that: *mut wire_cst_xswd_request_summary,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request_impl(that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+        that: *mut wire_cst_xswd_request_summary,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request_impl(that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+        that: *mut wire_cst_xswd_request_summary,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json_impl(that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
+        that: *mut wire_cst_xswd_request_summary,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json_impl(
+            that,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -9915,7 +10147,7 @@ field1: Default::default(), }
         name: *mut wire_cst_list_prim_u_8_strict,
         ticker: *mut wire_cst_list_prim_u_8_strict,
         decimals: u8,
-        max_supply: u64,
+        max_supply: wire_cst_xelis_max_supply_mode,
         owner: *mut wire_cst_xelis_asset_owner,
     }
     #[repr(C)]
@@ -9946,6 +10178,29 @@ field1: Default::default(), }
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
+    pub struct wire_cst_xelis_max_supply_mode {
+        tag: i32,
+        kind: XelisMaxSupplyModeKind,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub union XelisMaxSupplyModeKind {
+        Fixed: wire_cst_XelisMaxSupplyMode_Fixed,
+        Mintable: wire_cst_XelisMaxSupplyMode_Mintable,
+        nil__: (),
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_XelisMaxSupplyMode_Fixed {
+        field0: u64,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_XelisMaxSupplyMode_Mintable {
+        field0: u64,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
     pub struct wire_cst_xswd_request_summary {
         event_type: wire_cst_xswd_request_type,
         application_info: wire_cst_app_info,
@@ -9960,11 +10215,17 @@ field1: Default::default(), }
     #[derive(Clone, Copy)]
     pub union XswdRequestTypeKind {
         Permission: wire_cst_XswdRequestType_Permission,
+        PrefetchPermissions: wire_cst_XswdRequestType_PrefetchPermissions,
         nil__: (),
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
     pub struct wire_cst_XswdRequestType_Permission {
+        field0: *mut wire_cst_list_prim_u_8_strict,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_XswdRequestType_PrefetchPermissions {
         field0: *mut wire_cst_list_prim_u_8_strict,
     }
 }
@@ -10537,6 +10798,24 @@ mod web {
             }
         }
     }
+    impl CstDecode<crate::api::models::wallet_dtos::XelisMaxSupplyMode>
+        for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::models::wallet_dtos::XelisMaxSupplyMode {
+            let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
+            match self_.get(0).unchecked_into_f64() as _ {
+                0 => crate::api::models::wallet_dtos::XelisMaxSupplyMode::None,
+                1 => crate::api::models::wallet_dtos::XelisMaxSupplyMode::Fixed(
+                    self_.get(1).cst_decode(),
+                ),
+                2 => crate::api::models::wallet_dtos::XelisMaxSupplyMode::Mintable(
+                    self_.get(1).cst_decode(),
+                ),
+                _ => unreachable!(),
+            }
+        }
+    }
     impl CstDecode<crate::api::models::xswd_dtos::XswdRequestSummary>
         for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
     {
@@ -10568,8 +10847,11 @@ mod web {
                 1 => crate::api::models::xswd_dtos::XswdRequestType::Permission(
                     self_.get(1).cst_decode(),
                 ),
-                2 => crate::api::models::xswd_dtos::XswdRequestType::CancelRequest,
-                3 => crate::api::models::xswd_dtos::XswdRequestType::AppDisconnect,
+                2 => crate::api::models::xswd_dtos::XswdRequestType::PrefetchPermissions(
+                    self_.get(1).cst_decode(),
+                ),
+                3 => crate::api::models::xswd_dtos::XswdRequestType::CancelRequest,
+                4 => crate::api::models::xswd_dtos::XswdRequestType::AppDisconnect,
                 _ => unreachable!(),
             }
         }
@@ -11858,6 +12140,7 @@ mod web {
         cancel_request_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
         request_application_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
         request_permission_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        request_prefetch_permissions_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
         app_disconnect_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     ) {
         wire__crate__api__wallet__XelisWallet_start_xswd_impl(
@@ -11866,6 +12149,7 @@ mod web {
             cancel_request_dart_callback,
             request_application_dart_callback,
             request_permission_dart_callback,
+            request_prefetch_permissions_dart_callback,
             app_disconnect_dart_callback,
         )
     }
@@ -11925,12 +12209,6 @@ mod web {
             precomputed_tables_path,
             precomputed_table_type,
         )
-    }
-
-    #[wasm_bindgen]
-    pub fn wire__crate__api__wallet__clear_asset_cache(
-    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__wallet__clear_asset_cache_impl()
     }
 
     #[wasm_bindgen]
@@ -12013,12 +12291,6 @@ mod web {
     }
 
     #[wasm_bindgen]
-    pub fn wire__crate__api__wallet__get_asset_cache_size(
-    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__wallet__get_asset_cache_size_impl()
-    }
-
-    #[wasm_bindgen]
     pub fn wire__crate__api__wallet__get_cached_table(
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__wallet__get_cached_table_impl()
@@ -12053,10 +12325,25 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn wire__crate__api__api__initialize_crypto_provider(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+    ) {
+        wire__crate__api__api__initialize_crypto_provider_impl(port_)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__api__initialize_xelis_config(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+    ) {
+        wire__crate__api__api__initialize_xelis_config_impl(port_)
+    }
+
+    #[wasm_bindgen]
     pub fn wire__crate__api__utils__is_address_valid(
         str_address: String,
+        network: i32,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__utils__is_address_valid_impl(str_address)
+        wire__crate__api__utils__is_address_valid_impl(str_address, network)
     }
 
     #[wasm_bindgen]
@@ -12126,10 +12413,10 @@ mod web {
     }
 
     #[wasm_bindgen]
-    pub fn wire__crate__api__utils__split_integrated_address_json(
+    pub fn wire__crate__api__utils__split_integrated_address(
         integrated_address: String,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-        wire__crate__api__utils__split_integrated_address_json_impl(integrated_address)
+        wire__crate__api__utils__split_integrated_address_impl(integrated_address)
     }
 
     #[wasm_bindgen]
@@ -12152,6 +12439,7 @@ mod web {
         cancel_request_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
         request_application_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
         request_permission_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        request_prefetch_permissions_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
         app_disconnect_dart_callback: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     ) {
         wire__crate__api__xswd__imp__xswd_handler_impl(
@@ -12160,6 +12448,7 @@ mod web {
             cancel_request_dart_callback,
             request_application_dart_callback,
             request_permission_dart_callback,
+            request_prefetch_permissions_dart_callback,
             app_disconnect_dart_callback,
         )
     }
@@ -12190,6 +12479,29 @@ mod web {
         that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request_impl(that)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+        that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request_impl(that)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+        that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json_impl(that)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
+        that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json_impl(
+            that,
+        )
     }
 
     #[wasm_bindgen]

@@ -4,9 +4,9 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
+import 'network.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 // These functions have error during generation (see debug logs or enable `stop_on_error: true` for more details): `from_xelis`
 
 BigInt getLanguageIndexFromStr({required String input}) =>
@@ -16,12 +16,13 @@ List<String> getMnemonicWords({required BigInt languageIndex}) =>
     RustLib.instance.api
         .crateApiUtilsGetMnemonicWords(languageIndex: languageIndex);
 
-bool isAddressValid({required String strAddress}) =>
-    RustLib.instance.api.crateApiUtilsIsAddressValid(strAddress: strAddress);
+bool isAddressValid({required String strAddress, required Network network}) =>
+    RustLib.instance.api
+        .crateApiUtilsIsAddressValid(strAddress: strAddress, network: network);
 
-String splitIntegratedAddressJson({required String integratedAddress}) =>
-    RustLib.instance.api.crateApiUtilsSplitIntegratedAddressJson(
-        integratedAddress: integratedAddress);
+String splitIntegratedAddress({required String integratedAddress}) => RustLib
+    .instance.api
+    .crateApiUtilsSplitIntegratedAddress(integratedAddress: integratedAddress);
 
 Future<String> formatCoin({required BigInt value, required int decimals}) =>
     RustLib.instance.api

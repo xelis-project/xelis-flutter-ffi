@@ -508,6 +508,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   XelisAssetOwner dco_decode_xelis_asset_owner(dynamic raw);
 
   @protected
+  XelisMaxSupplyMode dco_decode_xelis_max_supply_mode(dynamic raw);
+
+  @protected
   XswdRequestSummary dco_decode_xswd_request_summary(dynamic raw);
 
   @protected
@@ -941,6 +944,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   XelisAssetOwner sse_decode_xelis_asset_owner(SseDeserializer deserializer);
+
+  @protected
+  XelisMaxSupplyMode sse_decode_xelis_max_supply_mode(
+      SseDeserializer deserializer);
 
   @protected
   XswdRequestSummary sse_decode_xswd_request_summary(
@@ -1402,7 +1409,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       cst_encode_String(raw.name),
       cst_encode_String(raw.ticker),
       cst_encode_u_8(raw.decimals),
-      cst_encode_u_64(raw.maxSupply),
+      cst_encode_xelis_max_supply_mode(raw.maxSupply),
       cst_encode_opt_box_autoadd_xelis_asset_owner(raw.owner)
     ].jsify()!;
   }
@@ -1430,6 +1437,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  JSAny cst_encode_xelis_max_supply_mode(XelisMaxSupplyMode raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    if (raw is XelisMaxSupplyMode_None) {
+      return [0].jsify()!;
+    }
+    if (raw is XelisMaxSupplyMode_Fixed) {
+      return [1, cst_encode_u_64(raw.field0)].jsify()!;
+    }
+    if (raw is XelisMaxSupplyMode_Mintable) {
+      return [2, cst_encode_u_64(raw.field0)].jsify()!;
+    }
+
+    throw Exception('unreachable');
+  }
+
+  @protected
   JSAny cst_encode_xswd_request_summary(XswdRequestSummary raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
@@ -1447,11 +1470,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     if (raw is XswdRequestType_Permission) {
       return [1, cst_encode_String(raw.field0)].jsify()!;
     }
+    if (raw is XswdRequestType_PrefetchPermissions) {
+      return [2, cst_encode_String(raw.field0)].jsify()!;
+    }
     if (raw is XswdRequestType_CancelRequest) {
-      return [2].jsify()!;
+      return [3].jsify()!;
     }
     if (raw is XswdRequestType_AppDisconnect) {
-      return [3].jsify()!;
+      return [4].jsify()!;
     }
 
     throw Exception('unreachable');
@@ -2091,6 +2117,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       XelisAssetOwner self, SseSerializer serializer);
 
   @protected
+  void sse_encode_xelis_max_supply_mode(
+      XelisMaxSupplyMode self, SseSerializer serializer);
+
+  @protected
   void sse_encode_xswd_request_summary(
       XswdRequestSummary self, SseSerializer serializer);
 
@@ -2536,6 +2566,7 @@ class RustLibWire implements BaseWire {
           PlatformPointer cancel_request_dart_callback,
           PlatformPointer request_application_dart_callback,
           PlatformPointer request_permission_dart_callback,
+          PlatformPointer request_prefetch_permissions_dart_callback,
           PlatformPointer app_disconnect_dart_callback) =>
       wasmModule.wire__crate__api__wallet__XelisWallet_start_xswd(
           port_,
@@ -2543,6 +2574,7 @@ class RustLibWire implements BaseWire {
           cancel_request_dart_callback,
           request_application_dart_callback,
           request_permission_dart_callback,
+          request_prefetch_permissions_dart_callback,
           app_disconnect_dart_callback);
 
   void wire__crate__api__wallet__XelisWallet_stop_xswd(
@@ -2577,10 +2609,6 @@ class RustLibWire implements BaseWire {
       wasmModule
           .wire__crate__api__precomputed_tables__are_precomputed_tables_available(
               port_, precomputed_tables_path, precomputed_table_type);
-
-  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__wallet__clear_asset_cache() =>
-          wasmModule.wire__crate__api__wallet__clear_asset_cache();
 
   JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__wallet__clear_cached_tables() =>
@@ -2633,10 +2661,6 @@ class RustLibWire implements BaseWire {
       wasmModule.wire__crate__api__utils__format_xelis(port_, value);
 
   JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__wallet__get_asset_cache_size() =>
-          wasmModule.wire__crate__api__wallet__get_asset_cache_size();
-
-  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__wallet__get_cached_table() =>
           wasmModule.wire__crate__api__wallet__get_cached_table();
 
@@ -2658,9 +2682,18 @@ class RustLibWire implements BaseWire {
   void wire__crate__api__logger__init_logger(NativePortType port_) =>
       wasmModule.wire__crate__api__logger__init_logger(port_);
 
+  void wire__crate__api__api__initialize_crypto_provider(
+          NativePortType port_) =>
+      wasmModule.wire__crate__api__api__initialize_crypto_provider(port_);
+
+  void wire__crate__api__api__initialize_xelis_config(NativePortType port_) =>
+      wasmModule.wire__crate__api__api__initialize_xelis_config(port_);
+
   JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__utils__is_address_valid(String str_address) =>
-          wasmModule.wire__crate__api__utils__is_address_valid(str_address);
+      wire__crate__api__utils__is_address_valid(
+              String str_address, int network) =>
+          wasmModule.wire__crate__api__utils__is_address_valid(
+              str_address, network);
 
   void wire__crate__api__wallet__open_xelis_wallet(
           NativePortType port_,
@@ -2711,9 +2744,9 @@ class RustLibWire implements BaseWire {
       wasmModule.wire__crate__api__api__set_up_rust_logger(port_);
 
   JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__utils__split_integrated_address_json(
+      wire__crate__api__utils__split_integrated_address(
               String integrated_address) =>
-          wasmModule.wire__crate__api__utils__split_integrated_address_json(
+          wasmModule.wire__crate__api__utils__split_integrated_address(
               integrated_address);
 
   void wire__crate__api__wallet__update_tables(NativePortType port_,
@@ -2727,6 +2760,7 @@ class RustLibWire implements BaseWire {
           PlatformPointer cancel_request_dart_callback,
           PlatformPointer request_application_dart_callback,
           PlatformPointer request_permission_dart_callback,
+          PlatformPointer request_prefetch_permissions_dart_callback,
           PlatformPointer app_disconnect_dart_callback) =>
       wasmModule.wire__crate__api__xswd__imp__xswd_handler(
           port_,
@@ -2734,6 +2768,7 @@ class RustLibWire implements BaseWire {
           cancel_request_dart_callback,
           request_application_dart_callback,
           request_permission_dart_callback,
+          request_prefetch_permissions_dart_callback,
           app_disconnect_dart_callback);
 
   JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
@@ -2762,6 +2797,27 @@ class RustLibWire implements BaseWire {
               JSAny that) =>
           wasmModule
               .wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request(
+                  that);
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+              JSAny that) =>
+          wasmModule
+              .wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+                  that);
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+              JSAny that) =>
+          wasmModule
+              .wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+                  that);
+
+  JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
+              JSAny that) =>
+          wasmModule
+              .wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
                   that);
 
   void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAddress(
@@ -3203,6 +3259,7 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
       PlatformPointer cancel_request_dart_callback,
       PlatformPointer request_application_dart_callback,
       PlatformPointer request_permission_dart_callback,
+      PlatformPointer request_prefetch_permissions_dart_callback,
       PlatformPointer app_disconnect_dart_callback);
 
   external void wire__crate__api__wallet__XelisWallet_stop_xswd(
@@ -3226,9 +3283,6 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
           NativePortType port_,
           String precomputed_tables_path,
           JSAny precomputed_table_type);
-
-  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__wallet__clear_asset_cache();
 
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__wallet__clear_cached_tables();
@@ -3263,9 +3317,6 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
       NativePortType port_, JSAny value);
 
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__wallet__get_asset_cache_size();
-
-  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__wallet__get_cached_table();
 
   external void wire__crate__api__wallet__get_current_precomputed_tables_type(
@@ -3279,8 +3330,15 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
 
   external void wire__crate__api__logger__init_logger(NativePortType port_);
 
+  external void wire__crate__api__api__initialize_crypto_provider(
+      NativePortType port_);
+
+  external void wire__crate__api__api__initialize_xelis_config(
+      NativePortType port_);
+
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__utils__is_address_valid(String str_address);
+      wire__crate__api__utils__is_address_valid(
+          String str_address, int network);
 
   external void wire__crate__api__wallet__open_xelis_wallet(
       NativePortType port_,
@@ -3313,7 +3371,7 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__api__set_up_rust_logger(NativePortType port_);
 
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire__crate__api__utils__split_integrated_address_json(
+      wire__crate__api__utils__split_integrated_address(
           String integrated_address);
 
   external void wire__crate__api__wallet__update_tables(NativePortType port_,
@@ -3325,6 +3383,7 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
       PlatformPointer cancel_request_dart_callback,
       PlatformPointer request_application_dart_callback,
       PlatformPointer request_permission_dart_callback,
+      PlatformPointer request_prefetch_permissions_dart_callback,
       PlatformPointer app_disconnect_dart_callback);
 
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
@@ -3341,6 +3400,18 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
 
   external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request(
+          JSAny that);
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+          JSAny that);
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+          JSAny that);
+
+  external JSAny? /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
           JSAny that);
 
   external void

@@ -506,6 +506,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   XelisAssetOwner dco_decode_xelis_asset_owner(dynamic raw);
 
   @protected
+  XelisMaxSupplyMode dco_decode_xelis_max_supply_mode(dynamic raw);
+
+  @protected
   XswdRequestSummary dco_decode_xswd_request_summary(dynamic raw);
 
   @protected
@@ -939,6 +942,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   XelisAssetOwner sse_decode_xelis_asset_owner(SseDeserializer deserializer);
+
+  @protected
+  XelisMaxSupplyMode sse_decode_xelis_max_supply_mode(
+      SseDeserializer deserializer);
 
   @protected
   XswdRequestSummary sse_decode_xswd_request_summary(
@@ -1527,7 +1534,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     wireObj.name = cst_encode_String(apiObj.name);
     wireObj.ticker = cst_encode_String(apiObj.ticker);
     wireObj.decimals = cst_encode_u_8(apiObj.decimals);
-    wireObj.max_supply = cst_encode_u_64(apiObj.maxSupply);
+    cst_api_fill_to_wire_xelis_max_supply_mode(
+        apiObj.maxSupply, wireObj.max_supply);
     wireObj.owner = cst_encode_opt_box_autoadd_xelis_asset_owner(apiObj.owner);
   }
 
@@ -1559,6 +1567,27 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_xelis_max_supply_mode(
+      XelisMaxSupplyMode apiObj, wire_cst_xelis_max_supply_mode wireObj) {
+    if (apiObj is XelisMaxSupplyMode_None) {
+      wireObj.tag = 0;
+      return;
+    }
+    if (apiObj is XelisMaxSupplyMode_Fixed) {
+      var pre_field0 = cst_encode_u_64(apiObj.field0);
+      wireObj.tag = 1;
+      wireObj.kind.Fixed.field0 = pre_field0;
+      return;
+    }
+    if (apiObj is XelisMaxSupplyMode_Mintable) {
+      var pre_field0 = cst_encode_u_64(apiObj.field0);
+      wireObj.tag = 2;
+      wireObj.kind.Mintable.field0 = pre_field0;
+      return;
+    }
+  }
+
+  @protected
   void cst_api_fill_to_wire_xswd_request_summary(
       XswdRequestSummary apiObj, wire_cst_xswd_request_summary wireObj) {
     cst_api_fill_to_wire_xswd_request_type(
@@ -1580,12 +1609,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       wireObj.kind.Permission.field0 = pre_field0;
       return;
     }
-    if (apiObj is XswdRequestType_CancelRequest) {
+    if (apiObj is XswdRequestType_PrefetchPermissions) {
+      var pre_field0 = cst_encode_String(apiObj.field0);
       wireObj.tag = 2;
+      wireObj.kind.PrefetchPermissions.field0 = pre_field0;
+      return;
+    }
+    if (apiObj is XswdRequestType_CancelRequest) {
+      wireObj.tag = 3;
       return;
     }
     if (apiObj is XswdRequestType_AppDisconnect) {
-      wireObj.tag = 3;
+      wireObj.tag = 4;
       return;
     }
   }
@@ -2222,6 +2257,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_xelis_asset_owner(
       XelisAssetOwner self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_xelis_max_supply_mode(
+      XelisMaxSupplyMode self, SseSerializer serializer);
 
   @protected
   void sse_encode_xswd_request_summary(
@@ -3897,6 +3936,7 @@ class RustLibWire implements BaseWire {
     ffi.Pointer<ffi.Void> cancel_request_dart_callback,
     ffi.Pointer<ffi.Void> request_application_dart_callback,
     ffi.Pointer<ffi.Void> request_permission_dart_callback,
+    ffi.Pointer<ffi.Void> request_prefetch_permissions_dart_callback,
     ffi.Pointer<ffi.Void> app_disconnect_dart_callback,
   ) {
     return _wire__crate__api__wallet__XelisWallet_start_xswd(
@@ -3905,6 +3945,7 @@ class RustLibWire implements BaseWire {
       cancel_request_dart_callback,
       request_application_dart_callback,
       request_permission_dart_callback,
+      request_prefetch_permissions_dart_callback,
       app_disconnect_dart_callback,
     );
   }
@@ -3918,6 +3959,7 @@ class RustLibWire implements BaseWire {
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
+            ffi.Pointer<ffi.Void>,
           )>>(
     'frbgen_xelis_flutter_wire__crate__api__wallet__XelisWallet_start_xswd',
   );
@@ -3926,6 +3968,7 @@ class RustLibWire implements BaseWire {
           void Function(
             int,
             int,
+            ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
@@ -4069,18 +4112,6 @@ class RustLibWire implements BaseWire {
                 ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                 ffi.Pointer<wire_cst_precomputed_table_type>,
               )>();
-
-  WireSyncRust2DartDco wire__crate__api__wallet__clear_asset_cache() {
-    return _wire__crate__api__wallet__clear_asset_cache();
-  }
-
-  late final _wire__crate__api__wallet__clear_asset_cachePtr =
-      _lookup<ffi.NativeFunction<WireSyncRust2DartDco Function()>>(
-    'frbgen_xelis_flutter_wire__crate__api__wallet__clear_asset_cache',
-  );
-  late final _wire__crate__api__wallet__clear_asset_cache =
-      _wire__crate__api__wallet__clear_asset_cachePtr
-          .asFunction<WireSyncRust2DartDco Function()>();
 
   WireSyncRust2DartDco wire__crate__api__wallet__clear_cached_tables() {
     return _wire__crate__api__wallet__clear_cached_tables();
@@ -4237,18 +4268,6 @@ class RustLibWire implements BaseWire {
       _wire__crate__api__utils__format_xelisPtr
           .asFunction<void Function(int, int)>();
 
-  WireSyncRust2DartDco wire__crate__api__wallet__get_asset_cache_size() {
-    return _wire__crate__api__wallet__get_asset_cache_size();
-  }
-
-  late final _wire__crate__api__wallet__get_asset_cache_sizePtr =
-      _lookup<ffi.NativeFunction<WireSyncRust2DartDco Function()>>(
-    'frbgen_xelis_flutter_wire__crate__api__wallet__get_asset_cache_size',
-  );
-  late final _wire__crate__api__wallet__get_asset_cache_size =
-      _wire__crate__api__wallet__get_asset_cache_sizePtr
-          .asFunction<WireSyncRust2DartDco Function()>();
-
   WireSyncRust2DartDco wire__crate__api__wallet__get_cached_table() {
     return _wire__crate__api__wallet__get_cached_table();
   }
@@ -4322,21 +4341,48 @@ class RustLibWire implements BaseWire {
       _wire__crate__api__logger__init_loggerPtr
           .asFunction<void Function(int)>();
 
+  void wire__crate__api__api__initialize_crypto_provider(int port_) {
+    return _wire__crate__api__api__initialize_crypto_provider(port_);
+  }
+
+  late final _wire__crate__api__api__initialize_crypto_providerPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+    'frbgen_xelis_flutter_wire__crate__api__api__initialize_crypto_provider',
+  );
+  late final _wire__crate__api__api__initialize_crypto_provider =
+      _wire__crate__api__api__initialize_crypto_providerPtr
+          .asFunction<void Function(int)>();
+
+  void wire__crate__api__api__initialize_xelis_config(int port_) {
+    return _wire__crate__api__api__initialize_xelis_config(port_);
+  }
+
+  late final _wire__crate__api__api__initialize_xelis_configPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+    'frbgen_xelis_flutter_wire__crate__api__api__initialize_xelis_config',
+  );
+  late final _wire__crate__api__api__initialize_xelis_config =
+      _wire__crate__api__api__initialize_xelis_configPtr
+          .asFunction<void Function(int)>();
+
   WireSyncRust2DartDco wire__crate__api__utils__is_address_valid(
     ffi.Pointer<wire_cst_list_prim_u_8_strict> str_address,
+    int network,
   ) {
-    return _wire__crate__api__utils__is_address_valid(str_address);
+    return _wire__crate__api__utils__is_address_valid(str_address, network);
   }
 
   late final _wire__crate__api__utils__is_address_validPtr = _lookup<
       ffi.NativeFunction<
           WireSyncRust2DartDco Function(
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Int32,
           )>>('frbgen_xelis_flutter_wire__crate__api__utils__is_address_valid');
   late final _wire__crate__api__utils__is_address_valid =
       _wire__crate__api__utils__is_address_validPtr.asFunction<
           WireSyncRust2DartDco Function(
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            int,
           )>();
 
   void wire__crate__api__wallet__open_xelis_wallet(
@@ -4497,24 +4543,23 @@ class RustLibWire implements BaseWire {
       _wire__crate__api__api__set_up_rust_loggerPtr
           .asFunction<void Function(int)>();
 
-  WireSyncRust2DartDco wire__crate__api__utils__split_integrated_address_json(
+  WireSyncRust2DartDco wire__crate__api__utils__split_integrated_address(
     ffi.Pointer<wire_cst_list_prim_u_8_strict> integrated_address,
   ) {
-    return _wire__crate__api__utils__split_integrated_address_json(
+    return _wire__crate__api__utils__split_integrated_address(
       integrated_address,
     );
   }
 
-  late final _wire__crate__api__utils__split_integrated_address_jsonPtr =
-      _lookup<
-          ffi.NativeFunction<
-              WireSyncRust2DartDco Function(
-                ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              )>>(
-    'frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address_json',
+  late final _wire__crate__api__utils__split_integrated_addressPtr = _lookup<
+      ffi.NativeFunction<
+          WireSyncRust2DartDco Function(
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )>>(
+    'frbgen_xelis_flutter_wire__crate__api__utils__split_integrated_address',
   );
-  late final _wire__crate__api__utils__split_integrated_address_json =
-      _wire__crate__api__utils__split_integrated_address_jsonPtr.asFunction<
+  late final _wire__crate__api__utils__split_integrated_address =
+      _wire__crate__api__utils__split_integrated_addressPtr.asFunction<
           WireSyncRust2DartDco Function(
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
           )>();
@@ -4552,6 +4597,7 @@ class RustLibWire implements BaseWire {
     ffi.Pointer<ffi.Void> cancel_request_dart_callback,
     ffi.Pointer<ffi.Void> request_application_dart_callback,
     ffi.Pointer<ffi.Void> request_permission_dart_callback,
+    ffi.Pointer<ffi.Void> request_prefetch_permissions_dart_callback,
     ffi.Pointer<ffi.Void> app_disconnect_dart_callback,
   ) {
     return _wire__crate__api__xswd__imp__xswd_handler(
@@ -4560,6 +4606,7 @@ class RustLibWire implements BaseWire {
       cancel_request_dart_callback,
       request_application_dart_callback,
       request_permission_dart_callback,
+      request_prefetch_permissions_dart_callback,
       app_disconnect_dart_callback,
     );
   }
@@ -4573,12 +4620,14 @@ class RustLibWire implements BaseWire {
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
+            ffi.Pointer<ffi.Void>,
           )>>('frbgen_xelis_flutter_wire__crate__api__xswd__imp__xswd_handler');
   late final _wire__crate__api__xswd__imp__xswd_handler =
       _wire__crate__api__xswd__imp__xswd_handlerPtr.asFunction<
           void Function(
             int,
             int,
+            ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
             ffi.Pointer<ffi.Void>,
@@ -4676,6 +4725,78 @@ class RustLibWire implements BaseWire {
   );
   late final _wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_request =
       _wire__crate__api__models__xswd_dtos__xswd_request_summary_is_permission_requestPtr
+          .asFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_xswd_request_summary>,
+              )>();
+
+  WireSyncRust2DartDco
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+    ffi.Pointer<wire_cst_xswd_request_summary> that,
+  ) {
+    return _wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request(
+      that,
+    );
+  }
+
+  late final _wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_requestPtr =
+      _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_xswd_request_summary>,
+              )>>(
+    'frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request',
+  );
+  late final _wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_request =
+      _wire__crate__api__models__xswd_dtos__xswd_request_summary_is_prefetch_permissions_requestPtr
+          .asFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_xswd_request_summary>,
+              )>();
+
+  WireSyncRust2DartDco
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+    ffi.Pointer<wire_cst_xswd_request_summary> that,
+  ) {
+    return _wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json(
+      that,
+    );
+  }
+
+  late final _wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_jsonPtr =
+      _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_xswd_request_summary>,
+              )>>(
+    'frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json',
+  );
+  late final _wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_json =
+      _wire__crate__api__models__xswd_dtos__xswd_request_summary_permission_jsonPtr
+          .asFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_xswd_request_summary>,
+              )>();
+
+  WireSyncRust2DartDco
+      wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
+    ffi.Pointer<wire_cst_xswd_request_summary> that,
+  ) {
+    return _wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json(
+      that,
+    );
+  }
+
+  late final _wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_jsonPtr =
+      _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_xswd_request_summary>,
+              )>>(
+    'frbgen_xelis_flutter_wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json',
+  );
+  late final _wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_json =
+      _wire__crate__api__models__xswd_dtos__xswd_request_summary_prefetch_permissions_jsonPtr
           .asFunction<
               WireSyncRust2DartDco Function(
                 ffi.Pointer<wire_cst_xswd_request_summary>,
@@ -5634,8 +5755,14 @@ final class wire_cst_XswdRequestType_Permission extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
 }
 
+final class wire_cst_XswdRequestType_PrefetchPermissions extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
+}
+
 final class XswdRequestTypeKind extends ffi.Union {
   external wire_cst_XswdRequestType_Permission Permission;
+
+  external wire_cst_XswdRequestType_PrefetchPermissions PrefetchPermissions;
 }
 
 final class wire_cst_xswd_request_type extends ffi.Struct {
@@ -5734,6 +5861,29 @@ final class wire_cst_list_record_string_u_64 extends ffi.Struct {
   external int len;
 }
 
+final class wire_cst_XelisMaxSupplyMode_Fixed extends ffi.Struct {
+  @ffi.Uint64()
+  external int field0;
+}
+
+final class wire_cst_XelisMaxSupplyMode_Mintable extends ffi.Struct {
+  @ffi.Uint64()
+  external int field0;
+}
+
+final class XelisMaxSupplyModeKind extends ffi.Union {
+  external wire_cst_XelisMaxSupplyMode_Fixed Fixed;
+
+  external wire_cst_XelisMaxSupplyMode_Mintable Mintable;
+}
+
+final class wire_cst_xelis_max_supply_mode extends ffi.Struct {
+  @ffi.Int32()
+  external int tag;
+
+  external XelisMaxSupplyModeKind kind;
+}
+
 final class wire_cst_xelis_asset_metadata extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> name;
 
@@ -5742,8 +5892,7 @@ final class wire_cst_xelis_asset_metadata extends ffi.Struct {
   @ffi.Uint8()
   external int decimals;
 
-  @ffi.Uint64()
-  external int max_supply;
+  external wire_cst_xelis_max_supply_mode max_supply;
 
   external ffi.Pointer<wire_cst_xelis_asset_owner> owner;
 }
