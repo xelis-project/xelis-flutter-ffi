@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use indexmap::IndexMap;
 
 use anyhow::{bail, Error, Result};
 pub use flutter_rust_bridge::DartFnFuture;
@@ -7,8 +8,9 @@ use xelis_common::tokio::spawn_task;
 pub use xelis_common::tokio::sync::mpsc::UnboundedReceiver;
 pub use xelis_common::tokio::sync::oneshot::Sender;
 pub use xelis_wallet::api::AppState;
-use xelis_wallet::api::{APIServer, Permission, PermissionResult};
+use xelis_wallet::api::{APIServer, Permission, InternalPrefetchPermissions, PermissionResult};
 pub use xelis_wallet::wallet::XSWDEvent;
+
 
 use crate::api::{
     models::xswd_dtos::{
@@ -16,8 +18,6 @@ use crate::api::{
     },
     wallet::XelisWallet,
 };
-
-// TODO: Add RequestBatchedPermissions handlers
 
 #[allow(async_fn_in_trait)]
 pub trait XSWD {
@@ -32,6 +32,10 @@ pub trait XSWD {
             + Sync
             + 'static,
         request_permission_dart_callback: impl Fn(XswdRequestSummary) -> DartFnFuture<UserPermissionDecision>
+            + Send
+            + Sync
+            + 'static,
+        request_prefetch_permissions_dart_callback: impl Fn(XswdRequestSummary) -> DartFnFuture<UserPermissionDecision>
             + Send
             + Sync
             + 'static,
@@ -71,6 +75,10 @@ impl XSWD for XelisWallet {
             + Send
             + Sync
             + 'static,
+        request_prefetch_permissions_dart_callback: impl Fn(XswdRequestSummary) -> DartFnFuture<UserPermissionDecision>
+            + Send
+            + Sync
+            + 'static,
         app_disconnect_dart_callback: impl Fn(XswdRequestSummary) -> DartFnFuture<()>
             + Send
             + Sync
@@ -84,12 +92,15 @@ impl XSWD for XelisWallet {
                         cancel_request_dart_callback,
                         request_application_dart_callback,
                         request_permission_dart_callback,
+                        request_prefetch_permissions_dart_callback,
                         app_disconnect_dart_callback,
                     )
                     .await;
                 });
             }
-            Ok(None) => bail!("Failed to enable XSWD Server: receiver is None"),
+            Ok(None) => {
+                // XSWD server is already running, this is not an error
+            }
             Err(e) => bail!("Error while enabling XSWD Server: {}", e),
         };
         Ok(())
@@ -234,6 +245,9 @@ pub async fn xswd_handler(
     request_permission_dart_callback: impl Fn(
         XswdRequestSummary,
     ) -> DartFnFuture<UserPermissionDecision>,
+    request_prefetch_permissions_dart_callback: impl Fn(
+        XswdRequestSummary,
+    ) -> DartFnFuture<UserPermissionDecision>,
     app_disconnect_dart_callback: impl Fn(XswdRequestSummary) -> DartFnFuture<()>,
 ) {
     info!("XSWD Server has been enabled");
@@ -268,16 +282,24 @@ pub async fn xswd_handler(
                 let decision = request_permission_dart_callback(event_summary).await;
 
                 handle_permission_decision(decision, callback);
-            }
+            },
+            XSWDEvent::PrefetchPermissions(state, permissions, callback) => {
+                let json = serde_json::to_string(&permissions)
+                    .expect("Failed to serialize prefetch permissions request");
+
+                let event_summary =
+                    create_event_summary(&state, XswdRequestType::PrefetchPermissions(json)).await;
+
+                let decision = request_prefetch_permissions_dart_callback(event_summary).await;
+
+                handle_prefetch_permissions_decision(decision, permissions, callback);
+            },
             XSWDEvent::AppDisconnect(app_state) => {
                 let event_summary =
                     create_event_summary(&app_state, XswdRequestType::AppDisconnect).await;
 
                 app_disconnect_dart_callback(event_summary).await;
             },
-            _ => {
-                info!("TODO: unhandled event");
-            }
         };
     }
 }
@@ -324,6 +346,28 @@ fn handle_permission_decision(
 
     if callback.send(Ok(result)).is_err() {
         error!("Error while sending permission response to XSWD");
+    }
+}
+
+fn handle_prefetch_permissions_decision(
+    decision: UserPermissionDecision,
+    permissions: InternalPrefetchPermissions,
+    callback: Sender<Result<IndexMap<String, Permission>, Error>>,
+) {
+    let accepted = matches!(
+        decision,
+        UserPermissionDecision::Accept | UserPermissionDecision::AlwaysAccept
+    );
+
+    let mut results: IndexMap<String, Permission> = IndexMap::new();
+    if accepted {
+        for p in permissions.permissions {
+            results.insert(p, Permission::Allow);
+        }
+    }
+
+    if callback.send(Ok(results)).is_err() {
+        error!("Error while sending prefetch permissions response back to XSWD");
     }
 }
 

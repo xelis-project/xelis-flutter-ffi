@@ -21,6 +21,7 @@ pub enum XSWDEvent {
     CancelRequest,
     RequestApplication,
     RequestPermission,
+    PrefetchPermissions,
     AppDisconnect,
 }
 
@@ -30,8 +31,6 @@ use crate::api::{
     },
     wallet::XelisWallet,
 };
-
-// TODO: Add RequestBatchedPermissions handlers
 
 #[allow(async_fn_in_trait)]
 pub trait XSWD {
@@ -125,6 +124,9 @@ pub async fn xswd_handler(
         XswdRequestSummary,
     ) -> DartFnFuture<UserPermissionDecision>,
     _request_permission_dart_callback: impl Fn(
+        XswdRequestSummary,
+    ) -> DartFnFuture<UserPermissionDecision>,
+    _request_prefetch_permissions_dart_callback: impl Fn(
         XswdRequestSummary,
     ) -> DartFnFuture<UserPermissionDecision>,
     _app_disconnect_dart_callback: impl Fn(XswdRequestSummary) -> DartFnFuture<()>,

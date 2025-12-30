@@ -1,13 +1,10 @@
 use flutter_rust_bridge::frb;
 
 use std::collections::HashMap;
-use std::num::NonZeroUsize;
 use std::fs::File;
 use std::path::Path;
 use std::sync::Arc;
 use std::thread;
-
-use lru::LruCache;
 
 use anyhow::{anyhow, bail, Context, Result};
 use indexmap::IndexSet;
@@ -17,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use xelis_common::api::wallet::BaseFeeMode;
 use xelis_common::api::{DataElement, DataValue};
-use xelis_common::asset::{AssetData, AssetOwner};
+use xelis_common::asset::{AssetData, AssetOwner, MaxSupplyMode};
 use xelis_common::config::{COIN_DECIMALS, XELIS_ASSET};
 use xelis_common::crypto::{Address, Hash, Hashable, Signature};
 use xelis_common::network::Network;
@@ -36,16 +33,26 @@ use xelis_wallet::wallet::{RecoverOption, Wallet};
 
 use super::models::wallet_dtos::{
     HistoryPageFilter, MultisigDartPayload, ParticipantDartPayload, SignatureMultisig,
-    SummaryTransaction, Transfer, XelisAssetMetadata, XelisAssetOwner
+    SummaryTransaction, Transfer, XelisAssetMetadata, XelisAssetOwner, XelisMaxSupplyMode
 };
 
 use super::precomputed_tables::{LogProgressTableGenerationReportFunction, PrecomputedTableType};
 use crate::frb_generated::StreamSink;
 
+impl From<MaxSupplyMode> for XelisMaxSupplyMode {
+    fn from(v: MaxSupplyMode) -> Self {
+        match v {
+            MaxSupplyMode::None => Self::None(()),
+            MaxSupplyMode::Fixed(x) => Self::Fixed(x),
+            MaxSupplyMode::Mintable(x) => Self::Mintable(x),
+        }
+    }
+}
+
 impl From<&AssetOwner> for XelisAssetOwner {
     fn from(value: &AssetOwner) -> Self {
         match value {
-            AssetOwner::None => XelisAssetOwner::None,
+            AssetOwner::None => XelisAssetOwner::None(()),
             AssetOwner::Creator { contract, id } => XelisAssetOwner::Creator {
                 contract: contract.to_hex(),
                 id: *id,
@@ -101,42 +108,10 @@ pub struct XelisWallet {
 
 static CACHED_TABLES: Mutex<Option<PrecomputedTablesShared>> = Mutex::new(None);
 static MT_PARAMS: Mutex<Option<(usize, usize)>> = Mutex::new(None);
-static ASSET_DATA_CACHE: Mutex<Option<LruCache<Hash, (AssetData, std::time::Instant)>>> =
-    Mutex::new(None);
-
-const ASSET_CACHE_TTL_SECS: u64 = 300;
-
-// ============================================================================
-// Cache Initialization
-// ============================================================================
-
-fn init_asset_cache() {
-    let mut cache_guard = ASSET_DATA_CACHE.lock();
-    if cache_guard.is_none() {
-        let cache = LruCache::new(NonZeroUsize::new(10).unwrap());
-        *cache_guard = Some(cache);
-    }
-}
 
 // ============================================================================
 // Global Functions - Cache Management
 // ============================================================================
-
-#[frb(sync)]
-pub fn clear_asset_cache() {
-    if let Some(cache) = ASSET_DATA_CACHE.lock().as_mut() {
-        cache.clear();
-    }
-}
-
-#[frb(sync)]
-pub fn get_asset_cache_size() -> usize {
-    ASSET_DATA_CACHE
-        .lock()
-        .as_ref()
-        .map(|cache| cache.len())
-        .unwrap_or(0)
-}
 
 #[frb(sync)]
 pub fn get_cached_table() -> Option<PrecomputedTablesShared> {
@@ -649,6 +624,7 @@ impl XelisWallet {
             match res {
                 Ok((asset, data)) => {
                     let owner_dto = XelisAssetOwner::from(data.get_owner());
+                    let supply_mode_dto = XelisMaxSupplyMode::from(data.get_max_supply());
 
                     assets.push((
                         asset.to_string(),
@@ -656,7 +632,7 @@ impl XelisWallet {
                             name: data.get_name().to_string(),
                             ticker: data.get_ticker().to_string(),
                             decimals: data.get_decimals(),
-                            max_supply: data.get_max_supply().get_max().unwrap_or(u64::MAX),
+                            max_supply: supply_mode_dto,
                             owner: Some(owner_dto),
                         },
                     ));
@@ -682,12 +658,13 @@ impl XelisWallet {
             match res {
                 Ok((hash, asset_data)) => {
                     let owner_dto = XelisAssetOwner::from(asset_data.get_owner());
+                    let supply_mode_dto = XelisMaxSupplyMode::from(asset_data.get_max_supply());
 
                     let dto = XelisAssetMetadata {
                         name: asset_data.get_name().to_string(),
                         ticker: asset_data.get_ticker().to_string(),
                         decimals: asset_data.get_decimals(),
-                        max_supply: asset_data.get_max_supply().get_max().unwrap_or(u64::MAX),
+                        max_supply: supply_mode_dto,
                         owner: Some(owner_dto),
                     };
 
@@ -743,45 +720,22 @@ impl XelisWallet {
     }
 
     async fn get_asset_data(&self, asset_hash: &Hash) -> Result<AssetData> {
-        init_asset_cache();
-
-        // 1. cache
-        {
-            let mut cache_guard = ASSET_DATA_CACHE.lock();
-            if let Some(cache) = cache_guard.as_mut() {
-                if let Some((data, timestamp)) = cache.get(asset_hash) {
-                    if timestamp.elapsed().as_secs() < ASSET_CACHE_TTL_SECS {
-                        return Ok(data.clone());
-                    } else {
-                        cache.pop(asset_hash);
-                    }
-                }
-            }
-        }
-
-        // 2. storage
+        // 1. Check storage (wallet.storage has its own cache)
         let storage = self.wallet.get_storage().read().await;
         if let Ok(asset) = storage.get_asset(asset_hash).await {
             debug!("Asset {} found in storage", asset_hash);
-            let mut cache_guard = ASSET_DATA_CACHE.lock();
-            if let Some(cache) = cache_guard.as_mut() {
-                cache.put(
-                    asset_hash.clone(),
-                    (asset.clone(), std::time::Instant::now()),
-                );
-            }
             return Ok(asset);
         }
 
-        // 3. offline guard
+        // 2. Offline guard
         if !self.wallet.is_online().await {
             return Err(anyhow!(
-                "Asset {} not found in wallet storage/cache and wallet is offline",
+                "Asset {} not found in wallet storage and wallet is offline",
                 asset_hash
             ));
         }
 
-        // 4. daemon
+        // 3. Fetch from daemon
         let asset_data = {
             let network_handler = self.wallet.get_network_handler().lock().await;
             if let Some(handler) = network_handler.as_ref() {
@@ -797,17 +751,6 @@ impl XelisWallet {
                 return Err(anyhow!("Network handler not available"));
             }
         };
-
-        // 5. cache it
-        {
-            let mut cache_guard = ASSET_DATA_CACHE.lock();
-            if let Some(cache) = cache_guard.as_mut() {
-                cache.put(
-                    asset_hash.clone(),
-                    (asset_data.clone(), std::time::Instant::now()),
-                );
-            }
-        }
 
         debug!("GET_ASSET_DATA for {} DONE", asset_hash);
         Ok(asset_data)
@@ -837,12 +780,13 @@ impl XelisWallet {
         let asset_data = self.get_asset_data(&asset_hash).await?;
 
         let owner_dto = XelisAssetOwner::from(asset_data.get_owner());
+        let supply_mode_dto = XelisMaxSupplyMode::from(asset_data.get_max_supply());
 
         let result = Ok(XelisAssetMetadata {
             name: asset_data.get_name().to_string(),
             ticker: asset_data.get_ticker().to_string(),
             decimals: asset_data.get_decimals(),
-            max_supply: asset_data.get_max_supply().get_max().unwrap_or(u64::MAX),
+            max_supply: supply_mode_dto,
             owner: Some(owner_dto),
         });
         ffi_exit!("get_asset_metadata", start_time, thread_id);
