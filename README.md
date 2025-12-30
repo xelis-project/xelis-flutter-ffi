@@ -18,6 +18,11 @@ This repo is setup to be a shoe-in library in flutter applications, allowing eas
 
 The continued adoption of Genesix features and dev QOL needs for apps are the primary points of focus for this library, helping to facilitate Xelis integration and adoption for the community.
 
+## Compatibility
+
+![Rust](https://img.shields.io/badge/rust-1.91%2B-orange.svg)
+![Xelis Dart SDK](https://img.shields.io/badge/xelis__dart__sdk-0.30.9%2B-blue.svg)
+
 ## Getting started
 To make use of `xelis-flutter-ffi`, simply add a git dependency to your flutter app's `pubspec.yaml`, like this:
 

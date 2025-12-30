@@ -15,8 +15,6 @@ dependencies:
   freezed_annotation: ">=2.0.0 <4.0.0"
   json_annotation: ^4.9.0
   path_provider: ^2.1.5
-  xelis_dart_sdk: ## ^0.24.0
-    git: https://github.com/Tritonn204/xelis-dart-sdk
   flutter_rust_bridge: 2.11.1
 
 dev_dependencies:
