@@ -1,6 +1,6 @@
 name: xelis_flutter
 description: "A pre-built suite of FFI bindings to use the native Rust Xelis wallet functions in any Flutter app, by simply adding this plugin as a dependency."
-version: 0.2.0
+version: 0.2.1
 homepage:
 
 environment:
