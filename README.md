@@ -72,7 +72,3 @@ Future<void> createXelisWallet() async {
   // ... use wallet and mnemonic as required
 }
 ```
-
-## Additional information
-
-The [Xelis Dart SDK](https://github.com/xelis-project/xelis-dart-sdk) is a dependency of this but is also a great tool to use alongside this library (as a direct dependency in your flutter app). It can be used for more direct RPC queries, health checks, data serialization, and more.
