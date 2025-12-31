@@ -52,6 +52,7 @@ Here is an example of using the api crate through FFI to create a Xelis Wallet i
 ```dart
 import 'package:xelis_flutter/src/api/wallet.dart' as x_wallet;
 import 'package:xelis_flutter/src/api/network.dart' as x_network;
+import 'package:xelis_flutter/src/api/precomputed_tables.dart';
 
 Future<void> createXelisWallet() async {
   final String name = "example-wallet";
@@ -64,7 +65,7 @@ Future<void> createXelisWallet() async {
     password: password,
     network: x_network.Network.mainnet,
     precomputedTablesPath: directory, // precomputed tables will be written to this location
-    l1Low: true, // will generate lightweight precomputed tables, use false for full-sized tables
+    precomputedTableType: const PrecomputedTableType.l1Low(), // lightweight tables (options: l1Low, l1Medium, l1Full)
   );
 
   final mnemonic = await wallet.getSeed();
