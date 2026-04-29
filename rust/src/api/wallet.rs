@@ -10,7 +10,6 @@ use anyhow::{anyhow, bail, Context, Result};
 use indexmap::IndexSet;
 use log::{debug, trace, error, info, warn};
 use parking_lot::{Mutex, RwLock};
-use serde::{Deserialize, Serialize};
 use serde_json::json;
 use xelis_common::api::wallet::BaseFeeMode;
 use xelis_common::api::{DataElement, DataValue};
@@ -1409,7 +1408,7 @@ impl XelisWallet {
             info!("Broadcasting transaction...");
             if let Err(e) = self.wallet.submit_transaction(&tx).await {
                 error!("Error while submitting transaction, clearing cache...");
-                storage.clear_tx_cache();
+                storage.clear_tx_cache().await;
                 storage.delete_unconfirmed_balances().await;
 
                 warn!("Inserting back to pending transactions in case of retry...");
@@ -1506,41 +1505,7 @@ impl XelisWallet {
             }
         }
 
-        let address = match filter.address {
-            Some(address) => {
-                let address = Address::from_string(&address).context("Invalid address")?;
-                Some(address.get_public_key().to_owned())
-            }
-            None => None,
-        };
-
-        let asset = match filter.asset_hash {
-            Some(asset_hash) => Some(Hash::from_hex(&asset_hash).context("Invalid asset")?),
-            None => None,
-        };
-
-        let transactions = storage.get_filtered_transactions(
-            address.as_ref(),
-            asset.as_ref(),
-            filter.min_topoheight,
-            filter.max_topoheight,
-            filter.accept_incoming,
-            filter.accept_outgoing,
-            match address {
-                Some(_) => false,
-                None => filter.accept_coinbase,
-            },
-            match address {
-                Some(_) => false,
-                None => filter.accept_burn,
-            },
-            None,
-            filter.limit,
-            match filter.limit {
-                Some(limit) => Some((filter.page - 1) * limit),
-                None => None,
-            },
-        )?;
+        let transactions = storage.get_filtered_transactions(filter.options()?)?;
 
         for tx in transactions {
             let transaction_entry = tx.serializable(self.wallet.get_network().is_mainnet());

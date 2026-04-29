@@ -78,22 +78,22 @@ impl ContactDetails {
     pub fn from(fields: HashMap<DataValue, DataElement>) -> Result<Self, DataConversionError> {
         let name = fields
             .get(&DataValue::String("name".to_string()))
-            .and_then(|v| v.as_value().ok())
-            .and_then(|v| v.as_string().ok())
-            .cloned()
-            .ok_or(DataConversionError::ExpectedValue)?;
+            .map(|v| v.as_value().and_then(|v| v.as_string()))
+            .transpose()?
+            .ok_or(DataConversionError::ExpectedValue)?
+            .clone();
 
         let address = fields
             .get(&DataValue::String("address".to_string()))
-            .and_then(|v| v.as_value().ok())
-            .and_then(|v| v.as_string().ok())
-            .cloned()
-            .ok_or(DataConversionError::ExpectedValue)?;
+            .map(|v| v.as_value().and_then(|v| v.as_string()))
+            .transpose()?
+            .ok_or(DataConversionError::ExpectedValue)?
+            .clone();
 
         let note = fields
             .get(&DataValue::String("note".to_string()))
-            .and_then(|v| v.as_value().ok())
-            .and_then(|v| v.as_string().ok())
+            .map(|v| v.as_value().and_then(|v| v.as_string()))
+            .transpose()?
             .cloned();
 
         Ok(ContactDetails {
@@ -105,7 +105,7 @@ impl ContactDetails {
 
     #[frb(ignore)]
     pub fn to_data_element(&self) -> DataElement {
-        let mut fields = HashMap::new();
+        let mut fields = IndexMap::new();
         fields.insert(
             DataValue::String("name".to_string()),
             DataElement::Value(DataValue::String(self.name.clone())),
@@ -114,6 +114,7 @@ impl ContactDetails {
             DataValue::String("address".to_string()),
             DataElement::Value(DataValue::String(self.address.clone())),
         );
+
         if let Some(note) = &self.note {
             fields.insert(
                 DataValue::String("note".to_string()),
