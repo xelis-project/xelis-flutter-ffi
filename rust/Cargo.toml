@@ -23,7 +23,7 @@ lru = "0.12"
 indexmap = { version = "2.0.0", features = ["serde"] }
 
 [build-dependencies]
-flutter_rust_bridge_codegen = "2.9.0" 
+flutter_rust_bridge_codegen = "2.12.0" 
 anyhow = "1"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
